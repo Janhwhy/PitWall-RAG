@@ -37,7 +37,7 @@ WEATHER_COLUMNS = [
 
 def fetch_weather() -> pd.DataFrame:
     """Load the 2025 Monaco GP session and return its weather dataframe."""
-    print("Loading 2025 Monaco Grand Prix — Race session (weather) …")
+    print("Loading 2025 Monaco Grand Prix - Race session (weather) ...")
     session = fastf1.get_session(2025, "Monaco Grand Prix", "R")
 
     # Weather is bundled with the session; no need for telemetry
@@ -49,17 +49,17 @@ def fetch_weather() -> pd.DataFrame:
     available = [col for col in WEATHER_COLUMNS if col in weather.columns]
     missing   = [col for col in WEATHER_COLUMNS if col not in weather.columns]
     if missing:
-        print(f"  ⚠  Columns not found and skipped: {missing}")
+        print(f"  [WARN] Columns not found and skipped: {missing}")
 
     df = weather[available].copy()
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     df.to_csv(OUTPUT_CSV, index=False)
 
-    print(f"\n✅  Weather data saved to: {OUTPUT_CSV.relative_to(ROOT_DIR)}")
-    print(f"    Rows      : {len(df)}")
-    print(f"    Columns   : {list(df.columns)}")
-    print(f"\n── First 5 rows ──────────────────────────────────────────────")
+    print(f"\n[OK] Weather data saved to: {OUTPUT_CSV.relative_to(ROOT_DIR)}")
+    print(f"     Rows      : {len(df)}")
+    print(f"     Columns   : {list(df.columns)}")
+    print(f"\n-- First 5 rows -----------------------------------------------")
     print(df.head().to_string(index=False))
 
     return df

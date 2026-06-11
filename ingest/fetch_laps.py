@@ -46,7 +46,7 @@ def fetch_laps(year: int, race: str, out: str) -> pd.DataFrame:
     """Load an F1 race session and return the selected lap columns."""
     output_csv = OUTPUT_DIR / f"{out}.csv"
 
-    print(f"Loading {year} {race} — Race session …")
+    print(f"Loading {year} {race} - Race session ...")
     session = fastf1.get_session(year, race, "R")
 
     # Load laps + telemetry + weather in one call
@@ -58,16 +58,16 @@ def fetch_laps(year: int, race: str, out: str) -> pd.DataFrame:
     available = [col for col in COLUMNS if col in laps.columns]
     missing   = [col for col in COLUMNS if col not in laps.columns]
     if missing:
-        print(f"  ⚠  Columns not found and skipped: {missing}")
+        print(f"  [WARN] Columns not found and skipped: {missing}")
 
     df = laps[available].copy()
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_csv, index=False)
 
-    print(f"\n✅  {len(df)} laps fetched and saved to: {output_csv.relative_to(ROOT_DIR)}")
-    print(f"    Columns saved : {list(df.columns)}")
-    print(f"    Drivers       : {sorted(df['Driver'].unique())}")
+    print(f"\n[OK] {len(df)} laps fetched and saved to: {output_csv.relative_to(ROOT_DIR)}")
+    print(f"     Columns saved : {list(df.columns)}")
+    print(f"     Drivers       : {sorted(df['Driver'].unique())}")
 
     return df
 
