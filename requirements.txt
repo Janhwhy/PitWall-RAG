@@ -1,5 +1,6 @@
 fastf1
 chromadb
 anthropic
-openai
+faster-whisper
 python-dotenv
+yt-dlp
