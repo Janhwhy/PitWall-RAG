@@ -1,6 +1,7 @@
 fastf1
 chromadb
 anthropic
+sentence-transformers
 faster-whisper
 python-dotenv
 yt-dlp
