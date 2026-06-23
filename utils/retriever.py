@@ -2,8 +2,8 @@
 retriever.py
 ------------
 Provides the ``retrieve`` function which queries one or more ChromaDB
-collections (laps, weather, radio) for chunks semantically similar to a
-given natural-language query.
+collections (laps, weather, radio, pitstops) for chunks semantically
+similar to a given natural-language query.
 
 Workflow
 --------
@@ -46,15 +46,17 @@ from utils.vectorstore import (                                  # local
     get_laps_collection,
     get_weather_collection,
     get_radio_collection,
+    get_pitstops_collection,
 )
 
 # ── Constants ───────────────────────────────────────────────────────────────
-ALL_COLLECTIONS: list[str] = ["laps", "weather", "radio"]
+ALL_COLLECTIONS: list[str] = ["laps", "weather", "radio", "pitstops"]
 
 _COLLECTION_GETTERS: dict[str, Any] = {
-    "laps":    get_laps_collection,
-    "weather": get_weather_collection,
-    "radio":   get_radio_collection,
+    "laps":     get_laps_collection,
+    "weather":  get_weather_collection,
+    "radio":    get_radio_collection,
+    "pitstops": get_pitstops_collection,
 }
 
 

@@ -13,6 +13,8 @@ get_weather_collection() -> chromadb.Collection
     Returns the 'weather' collection, creating it if it doesn't exist.
 get_radio_collection() -> chromadb.Collection
     Returns the 'radio' collection, creating it if it doesn't exist.
+get_pitstops_collection() -> chromadb.Collection
+    Returns the 'pitstops' collection, creating it if it doesn't exist.
 load_laps(chunks: list[dict]) -> int
     Loads embedded lap chunk dictionaries into the 'laps' collection, skipping duplicates.
     Returns the number of loaded chunks.
@@ -22,8 +24,11 @@ load_weather(chunks: list[dict]) -> int
 load_radio(chunks: list[dict]) -> int
     Loads embedded radio chunk dictionaries into the 'radio' collection, skipping duplicates.
     Returns the number of loaded chunks.
-load_all(laps_csv=None, weather_csv=None, radio_dir=None) -> None
-    Chunks, embeds, and loads all laps, weather, and radio data.
+load_pitstops(chunks: list[dict]) -> int
+    Loads embedded pitstop chunk dictionaries into the 'pitstops' collection, skipping duplicates.
+    Returns the number of loaded chunks.
+load_all(laps_csv=None, weather_csv=None, radio_dir=None, pitstops_csv=None) -> None
+    Chunks, embeds, and loads all laps, weather, radio, and pitstop data.
     Prints a summary of loaded chunks.
 
 Usage
@@ -104,6 +109,27 @@ def get_weather_collection(embedding_function=default_ef):
     """
     return client.get_or_create_collection(
         name="weather",
+        embedding_function=embedding_function
+    )
+
+
+def get_pitstops_collection(embedding_function=default_ef):
+    """
+    Get or create the 'pitstops' collection from ChromaDB.
+
+    Parameters
+    ----------
+    embedding_function : Optional[EmbeddingFunction]
+        The embedding function to use. Defaults to the sentence-transformers model
+        configured in embedder.py. Pass None to use Chroma's default.
+
+    Returns
+    -------
+    chromadb.Collection
+        The retrieved or newly created pitstops collection.
+    """
+    return client.get_or_create_collection(
+        name="pitstops",
         embedding_function=embedding_function
     )
 
@@ -363,9 +389,81 @@ def load_radio(chunks: list[dict[str, any]]) -> int:
     return len(to_add_ids)
 
 
-def load_all(laps_csv=None, weather_csv=None, radio_dir=None) -> None:
+def load_pitstops(chunks: list[dict[str, any]]) -> int:
     """
-    Chunks, embeds, and loads all laps, weather, and radio data.
+    Load embedded pitstop chunk dictionaries into the pitstops ChromaDB collection.
+    Uses driver name + lap number as a unique ID formatted as "pit_VER_lap28".
+    Skips any chunks that already exist in the collection to avoid duplicates.
+
+    Parameters
+    ----------
+    chunks : list of dict
+        Each dict must have:
+          - "text"      : str (the document text)
+          - "metadata"  : dict (must contain "driver" and "lap_number")
+          - "embedding" : list of float
+
+    Returns
+    -------
+    int
+        The number of chunks actually loaded into the collection.
+    """
+    if not chunks:
+        print("Loaded 0 chunks.")
+        return 0
+
+    collection = get_pitstops_collection()
+
+    valid_chunks = []
+    ids = []
+    for chunk in chunks:
+        metadata = chunk.get("metadata", {})
+        driver   = metadata.get("driver")
+        lap_num  = metadata.get("lap_number")
+        if driver is not None and lap_num is not None:
+            chunk_id = f"pit_{driver}_lap{lap_num}"
+            ids.append(chunk_id)
+            valid_chunks.append((chunk_id, chunk))
+
+    if not valid_chunks:
+        print("Loaded 0 chunks.")
+        return 0
+
+    existing_ids = set()
+    try:
+        existing_res = collection.get(ids=ids)
+        if existing_res and "ids" in existing_res:
+            existing_ids = set(existing_res["ids"])
+    except Exception:
+        pass
+
+    to_add_ids        = []
+    to_add_embeddings = []
+    to_add_metadatas  = []
+    to_add_documents  = []
+
+    for chunk_id, chunk in valid_chunks:
+        if chunk_id not in existing_ids:
+            to_add_ids.append(chunk_id)
+            to_add_embeddings.append(chunk["embedding"])
+            to_add_metadatas.append(chunk["metadata"])
+            to_add_documents.append(chunk["text"])
+
+    if to_add_ids:
+        collection.add(
+            ids=to_add_ids,
+            embeddings=to_add_embeddings,
+            metadatas=to_add_metadatas,
+            documents=to_add_documents,
+        )
+
+    print(f"Loaded {len(to_add_ids)} chunks.")
+    return len(to_add_ids)
+
+
+def load_all(laps_csv=None, weather_csv=None, radio_dir=None, pitstops_csv=None) -> None:
+    """
+    Chunks, embeds, and loads all laps, weather, radio, and pitstop data.
     Prints a summary showing total chunks loaded per collection.
 
     Parameters
@@ -376,8 +474,13 @@ def load_all(laps_csv=None, weather_csv=None, radio_dir=None) -> None:
         Path to the weather CSV.
     radio_dir : Optional[str or Path]
         Directory containing radio transcripts.
+    pitstops_csv : Optional[str or Path]
+        Path to the pitstops CSV (default: data/laps/monaco_2025_pitstops.csv).
     """
-    from utils.chunker import chunk_lap_data, chunk_weather_data, chunk_radio_transcripts
+    from utils.chunker import (
+        chunk_lap_data, chunk_weather_data,
+        chunk_radio_transcripts, chunk_pitstop_data,
+    )
 
     print("\n=== Ingestion starting: load_all() ===")
 
@@ -395,9 +498,18 @@ def load_all(laps_csv=None, weather_csv=None, radio_dir=None) -> None:
     print(f"  Generated {len(weather_chunks)} weather chunks.")
 
     radio_kwargs = {"transcripts_dir": radio_dir} if radio_dir is not None else {}
-    print(f"Chunking radio data...")
+    print("Chunking radio data...")
     radio_chunks = chunk_radio_transcripts(**radio_kwargs)
     print(f"  Generated {len(radio_chunks)} radio chunks.")
+
+    print("Chunking pitstop data...")
+    try:
+        pitstops_kwargs = {"csv_path": pitstops_csv} if pitstops_csv is not None else {}
+        pitstop_chunks = chunk_pitstop_data(**pitstops_kwargs)
+        print(f"  Generated {len(pitstop_chunks)} pitstop chunks.")
+    except FileNotFoundError as exc:
+        print(f"  [WARN] {exc} — skipping pitstops collection.")
+        pitstop_chunks = []
 
     # ── 2. Embedder ──────────────────────────────────────────────────────────
     print("\n--- Embedding Chunks ---")
@@ -411,6 +523,9 @@ def load_all(laps_csv=None, weather_csv=None, radio_dir=None) -> None:
     print("Embedding radio...")
     radio_embedded = embed_chunks(radio_chunks)
 
+    print("Embedding pitstops...")
+    pitstop_embedded = embed_chunks(pitstop_chunks) if pitstop_chunks else []
+
     # ── 3. Loaders ───────────────────────────────────────────────────────────
     print("\n--- Loading to Vector Database ---")
     
@@ -423,16 +538,21 @@ def load_all(laps_csv=None, weather_csv=None, radio_dir=None) -> None:
     print("Loading radio into collection...")
     radio_loaded = load_radio(radio_embedded)
 
-    # ── 4. Summary ───────────────────────────────────────────────────────────
-    laps_total = get_laps_collection().count()
-    weather_total = get_weather_collection().count()
-    radio_total = get_radio_collection().count()
+    print("Loading pitstops into collection...")
+    pitstop_loaded = load_pitstops(pitstop_embedded) if pitstop_embedded else 0
 
-    print("\n================ Ingestion Summary ================")
-    print(f"Laps Collection    : Loaded {laps_loaded:4d} new, Total: {laps_total:4d}")
-    print(f"Weather Collection : Loaded {weather_loaded:4d} new, Total: {weather_total:4d}")
-    print(f"Radio Collection   : Loaded {radio_loaded:4d} new, Total: {radio_total:4d}")
-    print("===================================================\n")
+    # ── 4. Summary ───────────────────────────────────────────────────────────
+    laps_total     = get_laps_collection().count()
+    weather_total  = get_weather_collection().count()
+    radio_total    = get_radio_collection().count()
+    pitstops_total = get_pitstops_collection().count()
+
+    print("\n=== Ingestion Summary ===")
+    print(f"Laps Collection     : Loaded {laps_loaded:4d} new, Total: {laps_total:4d}")
+    print(f"Weather Collection  : Loaded {weather_loaded:4d} new, Total: {weather_total:4d}")
+    print(f"Radio Collection    : Loaded {radio_loaded:4d} new, Total: {radio_total:4d}")
+    print(f"Pitstops Collection : Loaded {pitstop_loaded:4d} new, Total: {pitstops_total:4d}")
+    print("==========================\n")
 
 
 # ── Smoke test ─────────────────────────────────────────────────────────────

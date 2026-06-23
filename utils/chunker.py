@@ -8,6 +8,12 @@ Functions
 ---------
 chunk_lap_data(csv_path) -> list[dict]
     Converts a laps CSV into one text chunk per driver-lap, with metadata.
+chunk_weather_data(csv_path, window) -> list[dict]
+    Groups weather rows into windowed summary chunks.
+chunk_radio_transcripts(transcripts_dir) -> list[dict]
+    Parses team radio .txt transcripts into per-utterance chunks.
+chunk_pitstop_data(csv_path) -> list[dict]
+    Converts the pitstops CSV into one text chunk per pit stop, with metadata.
 """
 
 import pathlib
@@ -15,11 +21,12 @@ import re
 
 import pandas as pd
 
-# ── Default path ───────────────────────────────────────────────────────────
-ROOT_DIR            = pathlib.Path(__file__).resolve().parent.parent
-DEFAULT_LAPS_CSV    = ROOT_DIR / "data" / "laps"    / "monaco_2025.csv"
-DEFAULT_WEATHER_CSV = ROOT_DIR / "data" / "history" / "monaco_2025_weather.csv"
-DEFAULT_RADIO_DIR   = ROOT_DIR / "data" / "radio"   / "transcripts"
+# ── Default paths ──────────────────────────────────────────────────────────
+ROOT_DIR               = pathlib.Path(__file__).resolve().parent.parent
+DEFAULT_LAPS_CSV       = ROOT_DIR / "data" / "laps"    / "monaco_2025.csv"
+DEFAULT_PITSTOPS_CSV   = ROOT_DIR / "data" / "laps"    / "monaco_2025_pitstops.csv"
+DEFAULT_WEATHER_CSV    = ROOT_DIR / "data" / "history" / "monaco_2025_weather.csv"
+DEFAULT_RADIO_DIR      = ROOT_DIR / "data" / "radio"   / "transcripts"
 
 
 def _format_laptime(raw) -> str:
@@ -272,6 +279,77 @@ def chunk_radio_transcripts(
     return chunks
 
 
+def chunk_pitstop_data(
+    csv_path: str | pathlib.Path = DEFAULT_PITSTOPS_CSV,
+) -> list[dict]:
+    """
+    Read the pitstops CSV and convert each pit-stop row into a text chunk.
+
+    Expected columns (produced by ingest/fetch_laps.py):
+        Driver, LapNumber, PitInTime, PitOutTime, Compound, TyreLife
+
+    Each chunk is formatted as:
+        "Driver: VER pitted on Lap 28 | PitInTime: 28.4s | \
+Switched to: MEDIUM | TyreLife going in: 27 laps"
+
+    Parameters
+    ----------
+    csv_path : str or Path
+        Path to the pitstops CSV (default: data/laps/monaco_2025_pitstops.csv).
+
+    Returns
+    -------
+    list of dict
+        Each dict has:
+          - "text"     : human-readable pit-stop sentence
+          - "metadata" : dict with keys driver, lap_number, compound,
+                         pit_in_time, pit_out_time, tyre_life, source
+    """
+    csv_path = pathlib.Path(csv_path)
+    if not csv_path.exists():
+        raise FileNotFoundError(
+            f"Pitstops CSV not found: {csv_path}\n"
+            "Run 'python ingest/fetch_laps.py' first to generate it."
+        )
+
+    df = pd.read_csv(csv_path)
+
+    chunks: list[dict] = []
+
+    for _, row in df.iterrows():
+        driver     = str(row.get("Driver",     "N/A"))
+        lap_number = row.get("LapNumber",  "N/A")
+        compound   = str(row.get("Compound",   "N/A"))
+        tyre_life  = row.get("TyreLife",   "N/A")
+        pit_in     = _format_pit(row.get("PitInTime"))
+        pit_out    = _format_pit(row.get("PitOutTime"))
+
+        lap_str      = _safe_int(lap_number)
+        tyre_life_str = _safe_int(tyre_life)
+
+        text = (
+            f"Driver: {driver} pitted on Lap {lap_str} | "
+            f"PitInTime: {pit_in} | "
+            f"Switched to: {compound} | "
+            f"TyreLife going in: {tyre_life_str} laps"
+        )
+
+        lap_int = None if pd.isna(lap_number) else int(lap_number)
+        metadata = {
+            "driver":       driver,
+            "lap_number":   lap_int,
+            "compound":     compound,
+            "pit_in_time":  pit_in,
+            "pit_out_time": pit_out,
+            "tyre_life":    tyre_life_str,
+            "source":       "pitstops",
+        }
+
+        chunks.append({"text": text, "metadata": metadata})
+
+    return chunks
+
+
 # ── Quick smoke test ───────────────────────────────────────────────────────
 if __name__ == "__main__":
     # --- Lap chunks ---
@@ -295,8 +373,20 @@ if __name__ == "__main__":
     # --- Radio chunks ---
     radio_chunks = chunk_radio_transcripts()
     print(f"Radio chunks : {len(radio_chunks)}")
-    print("── Sample radio chunks ─────────────────────────────────────────")
+    print("Sample radio chunks")
     for chunk in radio_chunks[:5]:
         print(f"  TEXT    : {chunk['text']}")
         print(f"  METADATA: {chunk['metadata']}")
         print()
+
+    # --- Pitstop chunks ---
+    try:
+        pit_chunks = chunk_pitstop_data()
+        print(f"Pitstop chunks: {len(pit_chunks)}")
+        print("Sample pitstop chunks")
+        for chunk in pit_chunks[:5]:
+            print(f"  TEXT    : {chunk['text']}")
+            print(f"  METADATA: {chunk['metadata']}")
+            print()
+    except FileNotFoundError as exc:
+        print(f"[SKIP] {exc}")

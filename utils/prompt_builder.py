@@ -45,11 +45,12 @@ from typing import Any
 # ── Constants ────────────────────────────────────────────────────────────────
 
 # Canonical display order and human-readable labels for the three collections.
-_COLLECTION_ORDER: list[str] = ["laps", "weather", "radio"]
+_COLLECTION_ORDER: list[str] = ["laps", "pitstops", "weather", "radio"]
 _COLLECTION_LABELS: dict[str, str] = {
-    "laps":    "Lap Data",
-    "weather": "Weather Data",
-    "radio":   "Team Radio",
+    "laps":     "Lap Data",
+    "pitstops": "Pit Stops",
+    "weather":  "Weather Data",
+    "radio":    "Team Radio",
 }
 
 _SYSTEM_PROMPT = """\

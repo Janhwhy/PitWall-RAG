@@ -2,7 +2,12 @@
 fetch_laps.py
 -------------
 Fetches lap data for any F1 race session using the FastF1 library
-and saves selected columns to data/laps/<output_name>.csv.
+and saves two CSVs to data/laps/:
+
+    <out>.csv          – all laps with selected columns
+    <out>_pitstops.csv – only laps where PitInTime is not null
+                         (columns: Driver, LapNumber, PitInTime,
+                          PitOutTime, Compound, TyreLife)
 
 Default: 2025 Monaco Grand Prix
 
@@ -41,10 +46,29 @@ COLUMNS = [
     "PitOutTime",
 ]
 
+# Columns kept in the dedicated pitstops CSV
+PITSTOP_COLUMNS = [
+    "Driver",
+    "LapNumber",
+    "PitInTime",
+    "PitOutTime",
+    "Compound",
+    "TyreLife",
+]
+
 
 def fetch_laps(year: int, race: str, out: str) -> pd.DataFrame:
-    """Load an F1 race session and return the selected lap columns."""
-    output_csv = OUTPUT_DIR / f"{out}.csv"
+    """
+    Load an F1 race session, save all-laps CSV, and additionally save a
+    filtered pitstops CSV (rows where PitInTime is not null).
+
+    Outputs
+    -------
+    data/laps/<out>.csv           – all laps
+    data/laps/<out>_pitstops.csv  – pit-stop laps only
+    """
+    output_csv    = OUTPUT_DIR / f"{out}.csv"
+    pitstops_csv  = OUTPUT_DIR / f"{out}_pitstops.csv"
 
     print(f"Loading {year} {race} - Race session ...")
     session = fastf1.get_session(year, race, "R")
@@ -54,7 +78,7 @@ def fetch_laps(year: int, race: str, out: str) -> pd.DataFrame:
 
     laps: pd.DataFrame = session.laps
 
-    # Keep only columns that actually exist in the DataFrame
+    # ── Full laps CSV ────────────────────────────────────────────────────────
     available = [col for col in COLUMNS if col in laps.columns]
     missing   = [col for col in COLUMNS if col not in laps.columns]
     if missing:
@@ -65,9 +89,22 @@ def fetch_laps(year: int, race: str, out: str) -> pd.DataFrame:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_csv, index=False)
 
-    print(f"\n[OK] {len(df)} laps fetched and saved to: {output_csv.relative_to(ROOT_DIR)}")
-    print(f"     Columns saved : {list(df.columns)}")
-    print(f"     Drivers       : {sorted(df['Driver'].unique())}")
+    print(f"\n[OK] {len(df)} laps saved to: {output_csv.relative_to(ROOT_DIR)}")
+    print(f"     Columns : {list(df.columns)}")
+    print(f"     Drivers : {sorted(df['Driver'].unique())}")
+
+    # ── Pitstops CSV ─────────────────────────────────────────────────────────
+    pit_available = [col for col in PITSTOP_COLUMNS if col in laps.columns]
+    pit_missing   = [col for col in PITSTOP_COLUMNS if col not in laps.columns]
+    if pit_missing:
+        print(f"  [WARN] Pitstop columns not found and skipped: {pit_missing}")
+
+    # Filter to rows where PitInTime is not null — these are actual pit laps
+    pitstops_df = laps[laps["PitInTime"].notna()][pit_available].copy()
+    pitstops_df.to_csv(pitstops_csv, index=False)
+
+    print(f"[OK] {len(pitstops_df)} pit-stop laps saved to: {pitstops_csv.relative_to(ROOT_DIR)}")
+    print(f"     Columns : {list(pitstops_df.columns)}")
 
     return df
 
