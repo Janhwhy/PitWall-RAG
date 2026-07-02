@@ -55,8 +55,8 @@ class BaseAgent(ABC):
     def _retrieve(
         self,
         query: str,
-        top_k: int = 5,
-        distance_threshold: float = 0.35,
+        top_k: int = 15,
+        distance_threshold: float = 0.50,
     ) -> list[dict[str, Any]]:
         """
         Helper method to retrieve chunks from the database, constrained only to

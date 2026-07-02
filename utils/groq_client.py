@@ -42,7 +42,7 @@ ROOT_DIR = pathlib.Path(__file__).resolve().parent.parent
 load_dotenv(ROOT_DIR / ".env")
 
 # ── Constants ────────────────────────────────────────────────────────────────
-DEFAULT_MODEL      = "llama-3.3-70b-versatile"
+DEFAULT_MODEL      = "llama-3.1-8b-instant"
 DEFAULT_MAX_TOKENS = 1_024
 
 
