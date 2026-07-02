@@ -1,0 +1,317 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PitWall | Live Q&amp;A</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #e10600; }
+        
+        .strategy-card {
+            border-left: 4px solid #e10600;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .live-dot {
+            animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-container": "#e10600",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "on-secondary-fixed-variant": "#474646",
+                      "surface-variant": "#353534",
+                      "on-error-container": "#ffdad6",
+                      "tertiary-fixed": "#e5e2e1",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "surface-dim": "#131313",
+                      "inverse-on-surface": "#313030",
+                      "error": "#ffb4ab",
+                      "on-error": "#690005",
+                      "on-primary-fixed": "#410100",
+                      "tertiary-container": "#717070",
+                      "primary": "#ffb4a8",
+                      "primary-fixed": "#ffdad4",
+                      "secondary": "#c8c6c5",
+                      "secondary-container": "#4a4949",
+                      "outline": "#af8781",
+                      "on-surface": "#e5e2e1",
+                      "secondary-fixed": "#e5e2e1",
+                      "tertiary": "#c8c6c5",
+                      "background": "#131313",
+                      "surface-container-low": "#1c1b1b",
+                      "outline-variant": "#5e3f3a",
+                      "inverse-primary": "#c00500",
+                      "on-secondary": "#313030",
+                      "surface-container-lowest": "#0e0e0e",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "on-tertiary-fixed-variant": "#474746",
+                      "on-tertiary": "#313030",
+                      "primary-fixed-dim": "#ffb4a8",
+                      "tertiary-fixed-dim": "#c8c6c5",
+                      "on-primary-container": "#fff2f0",
+                      "surface": "#131313",
+                      "on-primary-fixed-variant": "#930300",
+                      "surface-container": "#201f1f",
+                      "on-tertiary-container": "#f8f5f4",
+                      "surface-tint": "#ffb4a8",
+                      "on-primary": "#680200",
+                      "surface-container-high": "#2a2a2a",
+                      "on-surface-variant": "#e9bcb5",
+                      "on-background": "#e5e2e1",
+                      "on-secondary-container": "#bab8b7",
+                      "surface-bright": "#3a3939",
+                      "inverse-surface": "#e5e2e1",
+                      "error-container": "#93000a",
+                      "surface-container-highest": "#353534"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "mobile_margin": "12px",
+                      "container_gap": "16px",
+                      "desktop_margin": "24px",
+                      "navbar_height": "48px",
+                      "sidebar_width": "240px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "label-caps": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "mono-data": ["JetBrains Mono"],
+                      "display-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.08em", "fontWeight": "700"}],
+                      "headline-sm": ["18px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "mono-data": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                      "display-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-white overflow-hidden">
+<!-- Desktop Sidebar -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-screen w-sidebar_width bg-surface-dim border-r border-outline-variant py-desktop_margin z-50">
+<div class="px-6 mb-8">
+<h1 class="text-headline-md font-bold text-primary-container leading-none">PitWall</h1>
+<p class="text-label-caps text-on-surface-variant mt-1 opacity-60">Your personal F1 pit wall</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center text-primary-container font-bold border-l-4 border-primary-container pl-3 py-3 hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">chat</span>
+<span class="font-label-caps">Live Q&amp;A</span>
+</a>
+<a class="flex items-center text-on-surface-variant pl-4 py-3 hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">event_note</span>
+<span class="font-label-caps">Pre-Race Brief</span>
+</a>
+<a class="flex items-center text-on-surface-variant pl-4 py-3 hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">history_edu</span>
+<span class="font-label-caps">Post-Race Debrief</span>
+</a>
+<a class="flex items-center text-on-surface-variant pl-4 py-3 hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">map</span>
+<span class="font-label-caps">Live Map</span>
+</a>
+</nav>
+<div class="px-4 mb-6">
+<button class="w-full py-2 px-4 border border-outline-variant text-on-surface-variant font-label-caps hover:bg-surface-container-high transition-all">
+                Year &amp; Race Selector
+            </button>
+</div>
+<div class="border-t border-outline-variant pt-6 px-4 space-y-4"><div class="flex items-center justify-between bg-surface-container-low p-2 rounded border border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">timer</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Laps</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+<span class="font-mono-data text-[10px] text-primary-container">78</span>
+</div>
+</div>
+<div class="flex items-center justify-between bg-surface-container-low p-2 rounded border border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">cloud</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Weather</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+<span class="font-mono-data text-[10px] text-primary-container">1</span>
+</div>
+</div>
+<div class="flex items-center justify-between bg-surface-container-low p-2 rounded border border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">settings_backup_restore</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Pitstops</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+<span class="font-mono-data text-[10px] text-primary-container">42</span>
+</div>
+</div>
+<div class="flex items-center justify-between bg-surface-container-low p-2 rounded border border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">radio</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Radio</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+<span class="font-mono-data text-[10px] text-primary-container">156</span>
+</div>
+</div></div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 h-navbar_height w-full md:pl-sidebar_width bg-surface-container border-b border-outline-variant z-40 flex justify-between items-center px-mobile_margin md:px-desktop_margin">
+<div class="flex items-center gap-4">
+<span class="md:hidden text-headline-sm font-black text-primary-container">PitWall</span>
+<div class="flex items-center gap-2 px-3 py-1 bg-primary-container/10 border border-primary-container/20 rounded-full">
+<span class="live-dot w-2 h-2 bg-primary-container rounded-full"></span>
+<span class="text-label-caps text-primary-container">Monaco 2026 — Strategy Mode</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary-container transition-colors">sensors</span>
+<div class="hidden md:flex items-center gap-1">
+<span class="text-label-caps text-on-surface">Live Telemetry</span>
+<span class="material-symbols-outlined text-on-surface text-xs" style="font-variation-settings: 'FILL' 1;">circle</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="h-screen pt-navbar_height pb-navbar_height md:pb-0 md:pl-sidebar_width flex flex-col bg-background">
+<!-- Chat History -->
+<div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scroll-smooth" id="chat-container">
+<!-- Empty State (Hidden if messages exist) -->
+<div class="h-full flex flex-col items-center justify-center opacity-40 select-none">
+<div class="w-16 h-16 bg-primary-container flex items-center justify-center rounded-lg mb-4">
+<span class="material-symbols-outlined text-white text-3xl">analytics</span>
+</div>
+<h2 class="text-headline-sm font-bold uppercase tracking-widest text-on-surface">Ask anything about F1 strategy</h2>
+<p class="text-body-md text-on-surface-variant max-w-xs text-center mt-2">Real-time AI analysis of tyre degradation, weather impact, and pit-stop windows.</p>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end w-full">
+<div class="max-w-[85%] md:max-w-[70%] bg-[#1a0000] p-4 rounded-xl border border-primary-container/10">
+<p class="text-on-surface body-md">How many laps can Leclerc stay on Mediums before the pit window for Hard tyres opens? Consider current degradation at Turn 12.</p>
+</div>
+<span class="text-[10px] font-label-caps text-on-surface-variant mt-1 mr-2 opacity-50">14:02:11</span>
+</div>
+<!-- AI Response Card -->
+<div class="flex flex-col items-start w-full">
+<div class="strategy-card max-w-[90%] md:max-w-[80%] bg-[#141414] p-5 rounded-r-xl shadow-xl">
+<div class="flex items-center gap-2 mb-3">
+<div class="bg-surface-container-high px-2 py-0.5 rounded flex items-center gap-1 border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="font-mono-data text-[10px] text-on-surface-variant uppercase">tyre_agent</span>
+</div>
+<span class="text-on-tertiary-fixed-variant text-[10px] font-mono-data">· 10 chunks parsed</span>
+</div>
+<div class="space-y-4">
+<p class="text-on-surface text-body-md leading-relaxed">Based on current telemetry from LEC (Car 16), the <span class="text-primary-container font-bold">Medium Compound</span> is showing a non-linear degradation spike at Turn 12 due to surface temperatures hitting 48°C.</p>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-surface-container-low p-3 border border-outline-variant rounded">
+<span class="block text-label-caps text-on-surface-variant opacity-60 mb-1">Optimum Lap</span>
+<span class="text-headline-sm font-bold text-primary-container">LAP 24</span>
+</div>
+<div class="bg-surface-container-low p-3 border border-outline-variant rounded">
+<span class="block text-label-caps text-on-surface-variant opacity-60 mb-1">Pace Delta</span>
+<span class="text-headline-sm font-bold text-on-surface">-0.420s</span>
+</div>
+</div>
+<p class="text-on-surface text-body-md">Recommended Action: <span class="font-bold underline decoration-primary-container">Stay Out</span>. The undercut threat from SAI is currently neutralized by traffic in Sector 2. Target pit window opens in 3.4 laps.</p>
+</div>
+</div>
+<span class="text-[10px] font-label-caps text-on-surface-variant mt-1 ml-2 opacity-50">14:02:14</span>
+</div>
+<!-- Typing Placeholder -->
+<div class="flex items-center gap-3 bg-surface-container-low w-fit px-4 py-2 rounded-full border border-outline-variant opacity-80" id="typing-indicator">
+<div class="flex gap-1">
+<div class="w-1.5 h-1.5 bg-primary-container rounded-full animate-bounce" style="animation-delay: 0s"></div>
+<div class="w-1.5 h-1.5 bg-primary-container rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+<div class="w-1.5 h-1.5 bg-primary-container rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+</div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">Strategist calculating...</span>
+</div>
+</div>
+<!-- Chat Input Section -->
+<div class="bg-surface-dim border-t border-outline-variant p-mobile_margin md:p-4">
+<!-- Suggestion Chips -->
+<div class="flex gap-2 overflow-x-auto pb-4 no-scrollbar"><button class="whitespace-nowrap px-4 py-1.5 bg-surface-container-high border border-outline-variant rounded-full text-label-caps text-on-surface-variant hover:border-primary-container transition-all" onclick="document.querySelector('input').value = this.innerText; document.querySelector('input').focus();">When did Verstappen pit?</button><button class="whitespace-nowrap px-4 py-1.5 bg-surface-container-high border border-outline-variant rounded-full text-label-caps text-on-surface-variant hover:border-primary-container transition-all" onclick="document.querySelector('input').value = this.innerText; document.querySelector('input').focus();">Compare 2025 vs 2026 Monaco strategy</button><button class="whitespace-nowrap px-4 py-1.5 bg-surface-container-high border border-outline-variant rounded-full text-label-caps text-on-surface-variant hover:border-primary-container transition-all" onclick="document.querySelector('input').value = this.innerText; document.querySelector('input').focus();">Who had the best tyre management?</button><button class="whitespace-nowrap px-4 py-1.5 bg-surface-container-high border border-outline-variant rounded-full text-label-caps text-on-surface-variant hover:border-primary-container transition-all" onclick="document.querySelector('input').value = this.innerText; document.querySelector('input').focus();">Was there a safety car?</button></div>
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-4 pl-4 pr-16 text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary-container transition-colors font-body-md" placeholder="Analyze specific driver or strategy..." type="text">
+<button class="absolute right-2 p-2 bg-primary-container text-white rounded-lg hover:brightness-110 active:scale-95 transition-all flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 md:hidden bg-surface-container-highest border-t border-outline-variant flex justify-around items-center h-navbar_height px-2 shadow-lg">
+<a class="flex flex-col items-center justify-center text-primary-container font-bold active:bg-surface-bright transition-transform scale-95" href="#">
+<span class="material-symbols-outlined">chat</span>
+<span class="text-label-caps text-[10px]">Live</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:bg-surface-bright transition-transform" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="text-label-caps text-[10px]">Brief</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:bg-surface-bright transition-transform" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="text-label-caps text-[10px]">Debrief</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:bg-surface-bright transition-transform" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="text-label-caps text-[10px]">Map</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for the input field
+        const input = document.querySelector('input');
+        const sendBtn = document.querySelector('button.absolute');
+        
+        input.addEventListener('focus', () => {
+            input.parentElement.classList.add('shadow-[0_0_20px_rgba(225,6,0,0.1)]');
+        });
+        
+        input.addEventListener('blur', () => {
+            input.parentElement.classList.remove('shadow-[0_0_20px_rgba(225,6,0,0.1)]');
+        });
+
+        // Auto-scroll chat to bottom
+        const container = document.getElementById('chat-container');
+        container.scrollTop = container.scrollHeight;
+    </script>
+
+
+</body></html>
