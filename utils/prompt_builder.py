@@ -61,6 +61,7 @@ ROLE
 You analyse lap telemetry, weather conditions, and team radio communications
 to deliver precise, data-driven answers about F1 race strategy, tyre management,
 pit-stop timing, and on-track performance.
+You have access to F1 data from 27 race weekends across 2025 and 2026. When answering questions about season-wide trends, use ALL the provided chunks which may come from different races — synthesize across them rather than focusing on just one.
 
 RULES — follow these without exception
 ---------------------------------------
@@ -163,7 +164,7 @@ def _build_user_prompt(question: str, chunks: list[dict[str, Any]]) -> str:
             for idx, chunk in enumerate(grouped[col_name], start=1):
                 text     = chunk.get("text", "").strip()
                 distance = chunk.get("distance")
-                metadata = chunk.get("metadata", {})
+                metadata = chunk.get("metadata", {}) or {}
 
                 # Build a compact header line for each chunk.
                 header_parts: list[str] = [f"Chunk {idx}"]
@@ -180,8 +181,12 @@ def _build_user_prompt(question: str, chunks: list[dict[str, Any]]) -> str:
                     if meta_snippets:
                         header_parts.append(", ".join(meta_snippets))
 
+                race_val = metadata.get("race", "Unknown")
+                year_val = metadata.get("year", "Unknown")
+                prefix = f"[{race_val} {year_val} | {col_name}]"
+
                 lines.append(f"**[{' | '.join(header_parts)}]**")
-                lines.append(text)
+                lines.append(f"{prefix} {text}")
                 lines.append("")   # blank line between chunks
 
     # ── Question ─────────────────────────────────────────────────────────────
@@ -199,25 +204,25 @@ if __name__ == "__main__":
     mock_chunks = [
         {
             "text": "Driver: VER | Lap: 32 | Compound: SOFT | LapTime: 1:12.345 | Position: 1",
-            "metadata": {"driver": "VER", "lap_number": 32, "compound": "SOFT"},
+            "metadata": {"driver": "VER", "lap_number": 32, "compound": "SOFT", "race": "Monaco", "year": 2025},
             "distance": 0.12,
             "collection": "laps",
         },
         {
             "text": "Driver: HAM | Lap: 32 | Compound: MEDIUM | LapTime: 1:13.102 | Position: 2",
-            "metadata": {"driver": "HAM", "lap_number": 32, "compound": "MEDIUM"},
+            "metadata": {"driver": "HAM", "lap_number": 32, "compound": "MEDIUM", "race": "Monaco", "year": 2025},
             "distance": 0.18,
             "collection": "laps",
         },
         {
             "text": "AirTemp: 28.5°C | TrackTemp: 44.2°C | Humidity: 38% | Rainfall: False",
-            "metadata": {"window_start": 30, "window_end": 39},
+            "metadata": {"window_start": 30, "window_end": 39, "race": "Monaco", "year": 2025},
             "distance": 0.21,
             "collection": "weather",
         },
         {
             "text": "[GP] Max, we're going to box you this lap. Soft tyres ready.",
-            "metadata": {"speaker": "GP", "filename": "monaco_2025_radio"},
+            "metadata": {"speaker": "GP", "filename": "monaco_2025_radio", "race": "Monaco", "year": 2025},
             "distance": 0.29,
             "collection": "radio",
         },

@@ -63,13 +63,15 @@ def _assert(condition: bool, message: str) -> None:
 # ── 1. Lap chunks ──────────────────────────────────────────────────────────
 _section("1 / 4  Lap Data Chunks")
 
-lap_chunks = chunk_lap_data()
+lap_chunks = chunk_lap_data(race_name="Monaco", year=2025)
 
 print(f"  Chunks produced : {len(lap_chunks)}")
 _assert(len(lap_chunks) > 0,                             "At least one lap chunk produced")
 _assert("text"     in lap_chunks[0],                     "Chunk has 'text' key")
 _assert("metadata" in lap_chunks[0],                     "Chunk has 'metadata' key")
 _assert(lap_chunks[0]["metadata"].get("source") == "laps", "Metadata source == 'laps'")
+_assert(lap_chunks[0]["metadata"].get("race") == "Monaco", "Metadata race == 'Monaco'")
+_assert(lap_chunks[0]["metadata"].get("year") == 2025,     "Metadata year == 2025")
 
 print(f"\n  Sample chunk (index 0):")
 print(DIVIDER)
@@ -78,13 +80,15 @@ _print_sample(lap_chunks[0])
 # ── 2. Weather chunks ──────────────────────────────────────────────────────
 _section("2 / 4  Weather Data Chunks")
 
-wx_chunks = chunk_weather_data()
+wx_chunks = chunk_weather_data(race_name="Monaco", year=2025)
 
 print(f"  Chunks produced : {len(wx_chunks)}")
 _assert(len(wx_chunks) > 0,                                "At least one weather chunk produced")
 _assert("text"     in wx_chunks[0],                        "Chunk has 'text' key")
 _assert("metadata" in wx_chunks[0],                        "Chunk has 'metadata' key")
 _assert(wx_chunks[0]["metadata"].get("source") == "weather", "Metadata source == 'weather'")
+_assert(wx_chunks[0]["metadata"].get("race") == "Monaco",    "Metadata race == 'Monaco'")
+_assert(wx_chunks[0]["metadata"].get("year") == 2025,        "Metadata year == 2025")
 
 print(f"\n  Sample chunk (index 0):")
 print(DIVIDER)
@@ -93,13 +97,15 @@ _print_sample(wx_chunks[0])
 # ── 3. Radio transcript chunks ─────────────────────────────────────────────
 _section("3 / 4  Radio Transcript Chunks")
 
-radio_chunks = chunk_radio_transcripts()
+radio_chunks = chunk_radio_transcripts(race_name="Monaco", year=2025)
 
 print(f"  Chunks produced : {len(radio_chunks)}")
 _assert(len(radio_chunks) > 0,                              "At least one radio chunk produced")
 _assert("text"     in radio_chunks[0],                      "Chunk has 'text' key")
 _assert("metadata" in radio_chunks[0],                      "Chunk has 'metadata' key")
 _assert(radio_chunks[0]["metadata"].get("source") == "radio", "Metadata source == 'radio'")
+_assert(radio_chunks[0]["metadata"].get("race") == "Monaco",   "Metadata race == 'Monaco'")
+_assert(radio_chunks[0]["metadata"].get("year") == 2025,       "Metadata year == 2025")
 
 print(f"\n  Sample chunk (index 0):")
 print(DIVIDER)

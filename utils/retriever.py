@@ -64,8 +64,8 @@ _COLLECTION_GETTERS: dict[str, Any] = {
 def retrieve(
     query: str,
     collections: list[str] | None = None,
-    top_k: int = 5,
-    distance_threshold: float = 0.35,
+    top_k: int = 15,
+    distance_threshold: float = 0.50,
 ) -> list[dict[str, Any]]:
     """
     Retrieve semantically similar chunks from one or more ChromaDB collections.
@@ -81,14 +81,14 @@ def retrieve(
         The natural-language question or search string.
     collections : list[str] | None
         Names of collections to search.  Must be a subset of
-        ``["laps", "weather", "radio"]``.  Defaults to all three.
+        ``["laps", "weather", "radio", "pitstops"]``.  Defaults to all.
     top_k : int
         Maximum number of nearest-neighbour results to fetch *per collection*
-        before applying the distance filter.  Defaults to 5.
+        before applying the distance filter.  Defaults to 15.
     distance_threshold : float
         Maximum cosine distance (inclusive) to keep a result.
         ChromaDB's cosine distance is in ``[0, 2]``; a value of 0 means
-        identical vectors.  Defaults to 0.35.
+        identical vectors.  Defaults to 0.50.
 
     Returns
     -------
@@ -164,6 +164,19 @@ def retrieve(
 
     # ── 3. Sort by distance ascending (closest first) ────────────────────────
     results.sort(key=lambda r: r["distance"])
+
+    # ── 4. Diversity filter: group by race and take top 3 chunks per race ─────
+    diversified_results = []
+    race_counts = {}
+    for r in results:
+        metadata = r.get("metadata") or {}
+        race = metadata.get("race", "Unknown")
+        count = race_counts.get(race, 0)
+        if count < 3:
+            diversified_results.append(r)
+            race_counts[race] = count + 1
+
+    results = diversified_results[:15]
 
     print(
         f"[INFO] retrieve: query={query!r:.60} | "

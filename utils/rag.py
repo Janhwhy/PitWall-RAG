@@ -44,8 +44,8 @@ from utils.groq_client   import ask_groq, DEFAULT_MODEL     # stage 3
 def ask(
     question: str,
     collections: list[str] | None = None,
-    top_k: int = 5,
-    distance_threshold: float = 0.35,
+    top_k: int = 15,
+    distance_threshold: float = 0.50,
     model: str = DEFAULT_MODEL,
     max_tokens: int = 1_024,
 ) -> str:
@@ -65,14 +65,14 @@ def ask(
     question : str
         Natural-language question from the user.
     collections : list[str] | None
-        Collections to search.  Subset of ``["laps", "weather", "radio"]``.
-        Defaults to all three.
+        Collections to search.  Subset of ``["laps", "weather", "radio", "pitstops"]``.
+        Defaults to all.
     top_k : int
         Maximum nearest-neighbour results to fetch *per collection* before
-        distance filtering.  Defaults to 5.
+        distance filtering.  Defaults to 15.
     distance_threshold : float
         Maximum cosine distance (inclusive) to keep a retrieved chunk.
-        Defaults to 0.35.
+        Defaults to 0.50.
     model : str
         Groq model identifier.  Defaults to ``"llama-3.1-70b-versatile"``.
     max_tokens : int

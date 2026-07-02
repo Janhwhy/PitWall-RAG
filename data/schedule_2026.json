@@ -1,0 +1,58 @@
+[
+    {
+        "round": 1,
+        "country": "Australia",
+        "location": "Melbourne",
+        "date": "2026-03-08",
+        "session_name": "Race"
+    },
+    {
+        "round": 2,
+        "country": "China",
+        "location": "Shanghai",
+        "date": "2026-03-15",
+        "session_name": "Race"
+    },
+    {
+        "round": 3,
+        "country": "Japan",
+        "location": "Suzuka",
+        "date": "2026-03-29",
+        "session_name": "Race"
+    },
+    {
+        "round": 4,
+        "country": "United States",
+        "location": "Miami Gardens",
+        "date": "2026-05-03",
+        "session_name": "Race"
+    },
+    {
+        "round": 5,
+        "country": "Canada",
+        "location": "Montr\u00e9al",
+        "date": "2026-05-24",
+        "session_name": "Race"
+    },
+    {
+        "round": 6,
+        "country": "Monaco",
+        "location": "Monte Carlo",
+        "date": "2026-06-07",
+        "session_name": "Race"
+    },
+    {
+        "round": 7,
+        "country": "Spain",
+        "location": "Barcelona",
+        "date": "2026-06-14",
+        "session_name": "Race"
+    },
+    {
+        "round": 8,
+        "country": "Austria",
+        "location": "Spielberg",
+        "date": "2026-06-28",
+        "session_name": "Race"
+    }
+]

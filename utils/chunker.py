@@ -6,13 +6,13 @@ embedding and ingestion into a vector store.
 
 Functions
 ---------
-chunk_lap_data(csv_path) -> list[dict]
+chunk_lap_data(csv_path, race_name, year) -> list[dict]
     Converts a laps CSV into one text chunk per driver-lap, with metadata.
-chunk_weather_data(csv_path, window) -> list[dict]
+chunk_weather_data(csv_path, window, race_name, year) -> list[dict]
     Groups weather rows into windowed summary chunks.
-chunk_radio_transcripts(transcripts_dir) -> list[dict]
+chunk_radio_transcripts(transcripts_dir, race_name, year) -> list[dict]
     Parses team radio .txt transcripts into per-utterance chunks.
-chunk_pitstop_data(csv_path) -> list[dict]
+chunk_pitstop_data(csv_path, race_name, year) -> list[dict]
     Converts the pitstops CSV into one text chunk per pit stop, with metadata.
 """
 
@@ -73,22 +73,33 @@ def _safe_int(value) -> str:
         return "N/A"
 
 
-def chunk_lap_data(csv_path: str | pathlib.Path = DEFAULT_LAPS_CSV) -> list[dict]:
+def chunk_lap_data(
+    csv_path: str | pathlib.Path = None,
+    race_name: str = "Monaco",
+    year: int = 2025,
+) -> list[dict]:
     """
     Read a laps CSV and convert each row into a text chunk with metadata.
 
     Parameters
     ----------
-    csv_path : str or Path
-        Path to the laps CSV file (default: data/laps/monaco_2025.csv).
+    csv_path : str or Path, optional
+        Path to the laps CSV file. If None, constructed from race_name and year.
+    race_name : str
+        Name of the race event (e.g. "Monaco").
+    year : int
+        Year of the race season (e.g. 2025).
 
     Returns
     -------
     list of dict
         Each dict has:
           - "text"     : human-readable sentence describing the lap
-          - "metadata" : dict with keys driver, lap_number, compound, source
+          - "metadata" : dict with keys driver, lap_number, compound, source, race, year
     """
+    if csv_path is None:
+        csv_path = ROOT_DIR / "data" / "laps" / f"{race_name.lower()}_{year}.csv"
+
     df = pd.read_csv(csv_path)
 
     chunks: list[dict] = []
@@ -122,6 +133,8 @@ def chunk_lap_data(csv_path: str | pathlib.Path = DEFAULT_LAPS_CSV) -> list[dict
             "lap_number":  lap_int,
             "compound":    compound,
             "source":      "laps",
+            "race":        race_name,
+            "year":        year,
         }
 
         chunks.append({"text": text, "metadata": metadata})
@@ -130,8 +143,10 @@ def chunk_lap_data(csv_path: str | pathlib.Path = DEFAULT_LAPS_CSV) -> list[dict
 
 
 def chunk_weather_data(
-    csv_path: str | pathlib.Path = DEFAULT_WEATHER_CSV,
+    csv_path: str | pathlib.Path = None,
     window: int = 10,
+    race_name: str = "Monaco",
+    year: int = 2025,
 ) -> list[dict]:
     """
     Read a weather CSV and group every `window` rows into one text chunk
@@ -139,18 +154,25 @@ def chunk_weather_data(
 
     Parameters
     ----------
-    csv_path : str or Path
-        Path to the weather CSV (default: data/history/monaco_2025_weather.csv).
+    csv_path : str or Path, optional
+        Path to the weather CSV. If None, constructed from race_name and year.
     window : int
         Number of rows to aggregate per chunk (default: 10).
+    race_name : str
+        Name of the race event (e.g. "Monaco").
+    year : int
+        Year of the race season (e.g. 2025).
 
     Returns
     -------
     list of dict
         Each dict has:
           - "text"     : formatted weather summary string
-          - "metadata" : dict with keys window_start, window_end, source
+          - "metadata" : dict with keys window_start, window_end, source, race, year
     """
+    if csv_path is None:
+        csv_path = ROOT_DIR / "data" / "history" / f"{race_name.lower()}_{year}_weather.csv"
+
     df = pd.read_csv(csv_path)
 
     chunks: list[dict] = []
@@ -180,6 +202,8 @@ def chunk_weather_data(
             "window_start": start,
             "window_end":   end,
             "source":       "weather",
+            "race":         race_name,
+            "year":         year,
         }
 
         chunks.append({"text": text, "metadata": metadata})
@@ -188,36 +212,39 @@ def chunk_weather_data(
 
 
 def chunk_radio_transcripts(
-    transcripts_dir: str | pathlib.Path = DEFAULT_RADIO_DIR,
+    transcripts_dir: str | pathlib.Path = None,
+    race_name: str = "Monaco",
+    year: int = 2025,
 ) -> list[dict]:
     """
-    Parse every .txt file in `transcripts_dir` into per-utterance text chunks.
-
-    Format expected (as produced by monaco_2025_radio_formatted.txt):
-        [SPEAKER] First line of utterance
-                  Continuation lines (indented — no tag)
-
-    Skipped lines
-    -------------
-    - Empty / whitespace-only lines
-    - Section headers: lines starting with ─, =, or matching patterns like
-      ── RACE START ──, ======, etc.
-    - Title lines (no [TAG] prefix and not a continuation)
+    Parse team radio .txt transcripts matching the race and year into per-utterance text chunks.
 
     Parameters
     ----------
-    transcripts_dir : str or Path
-        Directory containing .txt transcript files.
+    transcripts_dir : str or Path, optional
+        Directory containing .txt transcript files. If None, defaults to data/radio/transcripts.
+    race_name : str
+        Name of the race event (e.g. "Monaco").
+    year : int
+        Year of the race season (e.g. 2025).
 
     Returns
     -------
     list of dict
         Each dict has:
           - "text"     : full utterance text (joined multi-line)
-          - "metadata" : dict with keys speaker, filename, source
+          - "metadata" : dict with keys speaker, filename, source, race, year
     """
+    if transcripts_dir is None:
+        transcripts_dir = DEFAULT_RADIO_DIR
+
     transcripts_dir = pathlib.Path(transcripts_dir)
-    txt_files       = sorted(transcripts_dir.glob("*.txt"))
+    
+    # Try filtering by race and year in the filename first
+    pattern = f"*{race_name.lower()}_{year}*.txt"
+    txt_files = sorted(transcripts_dir.glob(pattern))
+    if not txt_files:
+        txt_files = sorted(transcripts_dir.glob("*.txt"))
 
     # Regex: matches lines that open a new speaker block, e.g. [COMMENTATOR]
     SPEAKER_RE  = re.compile(r"^\[([A-Z][A-Z0-9 _()]+)\]\s*(.*)", re.IGNORECASE)
@@ -243,6 +270,8 @@ def chunk_radio_transcripts(
                         "speaker":  current_speaker,
                         "filename": filename,
                         "source":   "radio",
+                        "race":     race_name,
+                        "year":     year,
                     },
                 })
 
@@ -280,22 +309,21 @@ def chunk_radio_transcripts(
 
 
 def chunk_pitstop_data(
-    csv_path: str | pathlib.Path = DEFAULT_PITSTOPS_CSV,
+    csv_path: str | pathlib.Path = None,
+    race_name: str = "Monaco",
+    year: int = 2025,
 ) -> list[dict]:
     """
     Read the pitstops CSV and convert each pit-stop row into a text chunk.
 
-    Expected columns (produced by ingest/fetch_laps.py):
-        Driver, LapNumber, PitInTime, PitOutTime, Compound, TyreLife
-
-    Each chunk is formatted as:
-        "Driver: VER pitted on Lap 28 | PitInTime: 28.4s | \
-Switched to: MEDIUM | TyreLife going in: 27 laps"
-
     Parameters
     ----------
-    csv_path : str or Path
-        Path to the pitstops CSV (default: data/laps/monaco_2025_pitstops.csv).
+    csv_path : str or Path, optional
+        Path to the pitstops CSV. If None, constructed from race_name and year.
+    race_name : str
+        Name of the race event (e.g. "Monaco").
+    year : int
+        Year of the race season (e.g. 2025).
 
     Returns
     -------
@@ -303,13 +331,16 @@ Switched to: MEDIUM | TyreLife going in: 27 laps"
         Each dict has:
           - "text"     : human-readable pit-stop sentence
           - "metadata" : dict with keys driver, lap_number, compound,
-                         pit_in_time, pit_out_time, tyre_life, source
+                         pit_in_time, pit_out_time, tyre_life, source, race, year
     """
+    if csv_path is None:
+        csv_path = ROOT_DIR / "data" / "laps" / f"{race_name.lower()}_{year}_pitstops.csv"
+
     csv_path = pathlib.Path(csv_path)
     if not csv_path.exists():
         raise FileNotFoundError(
             f"Pitstops CSV not found: {csv_path}\n"
-            "Run 'python ingest/fetch_laps.py' first to generate it."
+            f"Run 'python ingest/fetch_laps.py {year} {race_name}' first to generate it."
         )
 
     df = pd.read_csv(csv_path)
@@ -343,6 +374,8 @@ Switched to: MEDIUM | TyreLife going in: 27 laps"
             "pit_out_time": pit_out,
             "tyre_life":    tyre_life_str,
             "source":       "pitstops",
+            "race":         race_name,
+            "year":         year,
         }
 
         chunks.append({"text": text, "metadata": metadata})

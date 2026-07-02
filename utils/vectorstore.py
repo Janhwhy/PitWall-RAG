@@ -158,9 +158,8 @@ def get_radio_collection(embedding_function=default_ef):
 def load_laps(chunks: list[dict[str, any]]) -> int:
     """
     Load embedded lap chunk dictionaries into the laps ChromaDB collection.
-    Uses driver name + lap number as a unique ID formatted as "VER_lap32".
-    Skips any chunks that already exist in the collection to avoid duplicates.
-    Prints how many chunks were loaded when done.
+    Uses "monaco_2025_VER_lap32" style IDs (or "VER_lap32" fallback).
+    Uses upsert so that duplicate calls overwrite the existing records safely.
 
     Parameters
     ----------
@@ -173,7 +172,7 @@ def load_laps(chunks: list[dict[str, any]]) -> int:
     Returns
     -------
     int
-        The number of chunks actually loaded into the collection.
+        The number of chunks loaded/upserted.
     """
     if not chunks:
         print("Loaded 0 chunks.")
@@ -181,52 +180,35 @@ def load_laps(chunks: list[dict[str, any]]) -> int:
 
     collection = get_laps_collection()
 
-    # 1. Map chunks to unique IDs
     valid_chunks = []
-    ids = []
     for chunk in chunks:
         metadata = chunk.get("metadata", {})
         driver = metadata.get("driver")
         lap_num = metadata.get("lap_number")
         if driver is not None and lap_num is not None:
-            chunk_id = f"{driver}_lap{lap_num}"
-            ids.append(chunk_id)
+            race = metadata.get("race")
+            year = metadata.get("year")
+            if race and year:
+                chunk_id = f"{str(race).lower()}_{year}_{driver}_lap{lap_num}"
+            else:
+                chunk_id = f"{driver}_lap{lap_num}"
             valid_chunks.append((chunk_id, chunk))
 
     if not valid_chunks:
         print("Loaded 0 chunks.")
         return 0
 
-    # 2. Check which IDs already exist in the collection to avoid duplicates
-    existing_ids = set()
-    try:
-        existing_res = collection.get(ids=ids)
-        if existing_res and "ids" in existing_res:
-            existing_ids = set(existing_res["ids"])
-    except Exception:
-        pass
+    to_add_ids = [vc[0] for vc in valid_chunks]
+    to_add_embeddings = [vc[1]["embedding"] for vc in valid_chunks]
+    to_add_metadatas = [vc[1]["metadata"] for vc in valid_chunks]
+    to_add_documents = [vc[1]["text"] for vc in valid_chunks]
 
-    # 3. Filter out chunks that already exist
-    to_add_ids = []
-    to_add_embeddings = []
-    to_add_metadatas = []
-    to_add_documents = []
-
-    for chunk_id, chunk in valid_chunks:
-        if chunk_id not in existing_ids:
-            to_add_ids.append(chunk_id)
-            to_add_embeddings.append(chunk["embedding"])
-            to_add_metadatas.append(chunk["metadata"])
-            to_add_documents.append(chunk["text"])
-
-    # 4. Add the new chunks to ChromaDB
-    if to_add_ids:
-        collection.add(
-            ids=to_add_ids,
-            embeddings=to_add_embeddings,
-            metadatas=to_add_metadatas,
-            documents=to_add_documents
-        )
+    collection.upsert(
+        ids=to_add_ids,
+        embeddings=to_add_embeddings,
+        metadatas=to_add_metadatas,
+        documents=to_add_documents
+    )
 
     print(f"Loaded {len(to_add_ids)} chunks.")
     return len(to_add_ids)
@@ -235,9 +217,8 @@ def load_laps(chunks: list[dict[str, any]]) -> int:
 def load_weather(chunks: list[dict[str, any]]) -> int:
     """
     Load embedded weather chunk dictionaries into the weather ChromaDB collection.
-    Uses "weather_window_0" style IDs, where 0 is the window_start metadata field.
-    Skips any chunks that already exist in the collection to avoid duplicates.
-    Prints how many chunks were loaded when done.
+    Uses "monaco_2025_weather_window_0" style IDs (or "weather_window_0" fallback).
+    Uses upsert so that duplicate calls overwrite the existing records safely.
 
     Parameters
     ----------
@@ -250,7 +231,7 @@ def load_weather(chunks: list[dict[str, any]]) -> int:
     Returns
     -------
     int
-        The number of chunks actually loaded into the collection.
+        The number of chunks loaded/upserted.
     """
     if not chunks:
         print("Loaded 0 chunks.")
@@ -258,51 +239,34 @@ def load_weather(chunks: list[dict[str, any]]) -> int:
 
     collection = get_weather_collection()
 
-    # 1. Map chunks to unique IDs
     valid_chunks = []
-    ids = []
     for chunk in chunks:
         metadata = chunk.get("metadata", {})
         window_start = metadata.get("window_start")
         if window_start is not None:
-            chunk_id = f"weather_window_{window_start}"
-            ids.append(chunk_id)
+            race = metadata.get("race")
+            year = metadata.get("year")
+            if race and year:
+                chunk_id = f"{str(race).lower()}_{year}_weather_window_{window_start}"
+            else:
+                chunk_id = f"weather_window_{window_start}"
             valid_chunks.append((chunk_id, chunk))
 
     if not valid_chunks:
         print("Loaded 0 chunks.")
         return 0
 
-    # 2. Check which IDs already exist in the collection to avoid duplicates
-    existing_ids = set()
-    try:
-        existing_res = collection.get(ids=ids)
-        if existing_res and "ids" in existing_res:
-            existing_ids = set(existing_res["ids"])
-    except Exception:
-        pass
+    to_add_ids = [vc[0] for vc in valid_chunks]
+    to_add_embeddings = [vc[1]["embedding"] for vc in valid_chunks]
+    to_add_metadatas = [vc[1]["metadata"] for vc in valid_chunks]
+    to_add_documents = [vc[1]["text"] for vc in valid_chunks]
 
-    # 3. Filter out chunks that already exist
-    to_add_ids = []
-    to_add_embeddings = []
-    to_add_metadatas = []
-    to_add_documents = []
-
-    for chunk_id, chunk in valid_chunks:
-        if chunk_id not in existing_ids:
-            to_add_ids.append(chunk_id)
-            to_add_embeddings.append(chunk["embedding"])
-            to_add_metadatas.append(chunk["metadata"])
-            to_add_documents.append(chunk["text"])
-
-    # 4. Add the new chunks to ChromaDB
-    if to_add_ids:
-        collection.add(
-            ids=to_add_ids,
-            embeddings=to_add_embeddings,
-            metadatas=to_add_metadatas,
-            documents=to_add_documents
-        )
+    collection.upsert(
+        ids=to_add_ids,
+        embeddings=to_add_embeddings,
+        metadatas=to_add_metadatas,
+        documents=to_add_documents
+    )
 
     print(f"Loaded {len(to_add_ids)} chunks.")
     return len(to_add_ids)
@@ -311,9 +275,8 @@ def load_weather(chunks: list[dict[str, any]]) -> int:
 def load_radio(chunks: list[dict[str, any]]) -> int:
     """
     Load embedded radio chunk dictionaries into the radio ChromaDB collection.
-    Uses filename + line/chunk index as ID like "monaco_2025_radio_0".
-    Skips any chunks that already exist in the collection to avoid duplicates.
-    Prints how many chunks were loaded when done.
+    Uses "monaco_2025_monaco_2025_radio_0" style IDs (or "monaco_2025_radio_0" fallback).
+    Uses upsert so that duplicate calls overwrite the existing records safely.
 
     Parameters
     ----------
@@ -326,7 +289,7 @@ def load_radio(chunks: list[dict[str, any]]) -> int:
     Returns
     -------
     int
-        The number of chunks actually loaded into the collection.
+        The number of chunks loaded/upserted.
     """
     if not chunks:
         print("Loaded 0 chunks.")
@@ -334,9 +297,7 @@ def load_radio(chunks: list[dict[str, any]]) -> int:
 
     collection = get_radio_collection()
 
-    # 1. Map chunks to unique IDs using a sequential counter per filename to handle multiple files safely
     valid_chunks = []
-    ids = []
     filename_counters = {}
     for chunk in chunks:
         metadata = chunk.get("metadata", {})
@@ -346,44 +307,29 @@ def load_radio(chunks: list[dict[str, any]]) -> int:
         idx = filename_counters[filename]
         filename_counters[filename] += 1
 
-        chunk_id = f"{filename}_{idx}"
-        ids.append(chunk_id)
+        race = metadata.get("race")
+        year = metadata.get("year")
+        if race and year:
+            chunk_id = f"{str(race).lower()}_{year}_{filename}_{idx}"
+        else:
+            chunk_id = f"{filename}_{idx}"
         valid_chunks.append((chunk_id, chunk))
 
     if not valid_chunks:
         print("Loaded 0 chunks.")
         return 0
 
-    # 2. Check which IDs already exist in the collection to avoid duplicates
-    existing_ids = set()
-    try:
-        existing_res = collection.get(ids=ids)
-        if existing_res and "ids" in existing_res:
-            existing_ids = set(existing_res["ids"])
-    except Exception:
-        pass
+    to_add_ids = [vc[0] for vc in valid_chunks]
+    to_add_embeddings = [vc[1]["embedding"] for vc in valid_chunks]
+    to_add_metadatas = [vc[1]["metadata"] for vc in valid_chunks]
+    to_add_documents = [vc[1]["text"] for vc in valid_chunks]
 
-    # 3. Filter out chunks that already exist
-    to_add_ids = []
-    to_add_embeddings = []
-    to_add_metadatas = []
-    to_add_documents = []
-
-    for chunk_id, chunk in valid_chunks:
-        if chunk_id not in existing_ids:
-            to_add_ids.append(chunk_id)
-            to_add_embeddings.append(chunk["embedding"])
-            to_add_metadatas.append(chunk["metadata"])
-            to_add_documents.append(chunk["text"])
-
-    # 4. Add the new chunks to ChromaDB
-    if to_add_ids:
-        collection.add(
-            ids=to_add_ids,
-            embeddings=to_add_embeddings,
-            metadatas=to_add_metadatas,
-            documents=to_add_documents
-        )
+    collection.upsert(
+        ids=to_add_ids,
+        embeddings=to_add_embeddings,
+        metadatas=to_add_metadatas,
+        documents=to_add_documents
+    )
 
     print(f"Loaded {len(to_add_ids)} chunks.")
     return len(to_add_ids)
@@ -392,8 +338,8 @@ def load_radio(chunks: list[dict[str, any]]) -> int:
 def load_pitstops(chunks: list[dict[str, any]]) -> int:
     """
     Load embedded pitstop chunk dictionaries into the pitstops ChromaDB collection.
-    Uses driver name + lap number as a unique ID formatted as "pit_VER_lap28".
-    Skips any chunks that already exist in the collection to avoid duplicates.
+    Uses "monaco_2025_pit_VER_lap28" style IDs (or "pit_VER_lap28" fallback).
+    Uses upsert so that duplicate calls overwrite the existing records safely.
 
     Parameters
     ----------
@@ -406,7 +352,7 @@ def load_pitstops(chunks: list[dict[str, any]]) -> int:
     Returns
     -------
     int
-        The number of chunks actually loaded into the collection.
+        The number of chunks loaded/upserted.
     """
     if not chunks:
         print("Loaded 0 chunks.")
@@ -415,47 +361,34 @@ def load_pitstops(chunks: list[dict[str, any]]) -> int:
     collection = get_pitstops_collection()
 
     valid_chunks = []
-    ids = []
     for chunk in chunks:
         metadata = chunk.get("metadata", {})
         driver   = metadata.get("driver")
         lap_num  = metadata.get("lap_number")
         if driver is not None and lap_num is not None:
-            chunk_id = f"pit_{driver}_lap{lap_num}"
-            ids.append(chunk_id)
+            race = metadata.get("race")
+            year = metadata.get("year")
+            if race and year:
+                chunk_id = f"{str(race).lower()}_{year}_pit_{driver}_lap{lap_num}"
+            else:
+                chunk_id = f"pit_{driver}_lap{lap_num}"
             valid_chunks.append((chunk_id, chunk))
 
     if not valid_chunks:
         print("Loaded 0 chunks.")
         return 0
 
-    existing_ids = set()
-    try:
-        existing_res = collection.get(ids=ids)
-        if existing_res and "ids" in existing_res:
-            existing_ids = set(existing_res["ids"])
-    except Exception:
-        pass
+    to_add_ids = [vc[0] for vc in valid_chunks]
+    to_add_embeddings = [vc[1]["embedding"] for vc in valid_chunks]
+    to_add_metadatas = [vc[1]["metadata"] for vc in valid_chunks]
+    to_add_documents = [vc[1]["text"] for vc in valid_chunks]
 
-    to_add_ids        = []
-    to_add_embeddings = []
-    to_add_metadatas  = []
-    to_add_documents  = []
-
-    for chunk_id, chunk in valid_chunks:
-        if chunk_id not in existing_ids:
-            to_add_ids.append(chunk_id)
-            to_add_embeddings.append(chunk["embedding"])
-            to_add_metadatas.append(chunk["metadata"])
-            to_add_documents.append(chunk["text"])
-
-    if to_add_ids:
-        collection.add(
-            ids=to_add_ids,
-            embeddings=to_add_embeddings,
-            metadatas=to_add_metadatas,
-            documents=to_add_documents,
-        )
+    collection.upsert(
+        ids=to_add_ids,
+        embeddings=to_add_embeddings,
+        metadatas=to_add_metadatas,
+        documents=to_add_documents
+    )
 
     print(f"Loaded {len(to_add_ids)} chunks.")
     return len(to_add_ids)

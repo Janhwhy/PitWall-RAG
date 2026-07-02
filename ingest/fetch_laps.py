@@ -1,24 +1,17 @@
 """
 fetch_laps.py
 -------------
-Fetches lap data for any F1 race session using the FastF1 library
-and saves two CSVs to data/laps/:
-
-    <out>.csv          – all laps with selected columns
-    <out>_pitstops.csv – only laps where PitInTime is not null
-                         (columns: Driver, LapNumber, PitInTime,
-                          PitOutTime, Compound, TyreLife)
-
-Default: 2025 Monaco Grand Prix
+Fetches lap, pitstop, and weather data for a specified F1 race session using the FastF1 library.
+Saves three files:
+    data/laps/{country_lowercase}_{year}.csv           - Lap data
+    data/laps/{country_lowercase}_{year}_pitstops.csv  - Pitstop data
+    data/history/{country_lowercase}_{year}_weather.csv - Weather data
 
 Usage:
-    # Default — Monaco 2025
-    python ingest/fetch_laps.py
-
-    # Custom race
-    python ingest/fetch_laps.py --year 2024 --race "British Grand Prix" --out silverstone_2024
+    python ingest/fetch_laps.py 2025 Monaco
 """
 
+import sys
 import argparse
 import pathlib
 
@@ -28,7 +21,8 @@ import pandas as pd
 # ── Paths ──────────────────────────────────────────────────────────────────
 ROOT_DIR   = pathlib.Path(__file__).resolve().parent.parent
 CACHE_DIR  = ROOT_DIR / "cache"
-OUTPUT_DIR = ROOT_DIR / "data" / "laps"
+LAPS_DIR   = ROOT_DIR / "data" / "laps"
+HISTORY_DIR = ROOT_DIR / "data" / "history"
 
 # ── FastF1 cache ───────────────────────────────────────────────────────────
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
@@ -46,7 +40,6 @@ COLUMNS = [
     "PitOutTime",
 ]
 
-# Columns kept in the dedicated pitstops CSV
 PITSTOP_COLUMNS = [
     "Driver",
     "LapNumber",
@@ -56,67 +49,87 @@ PITSTOP_COLUMNS = [
     "TyreLife",
 ]
 
+WEATHER_COLUMNS = [
+    "AirTemp",
+    "Humidity",
+    "Pressure",
+    "Rainfall",
+    "TrackTemp",
+    "WindDirection",
+    "WindSpeed",
+]
 
-def fetch_laps(year: int, race: str, out: str) -> pd.DataFrame:
+
+def fetch_data(year: int, country: str) -> None:
     """
-    Load an F1 race session, save all-laps CSV, and additionally save a
-    filtered pitstops CSV (rows where PitInTime is not null).
-
-    Outputs
-    -------
-    data/laps/<out>.csv           – all laps
-    data/laps/<out>_pitstops.csv  – pit-stop laps only
+    Fetch lap, pitstop, and weather data for a given year and country.
+    Saves outputs to the configured CSV paths.
+    If no session data is available, prints a warning and exits cleanly.
     """
-    output_csv    = OUTPUT_DIR / f"{out}.csv"
-    pitstops_csv  = OUTPUT_DIR / f"{out}_pitstops.csv"
+    country_lowercase = country.lower()
+    
+    # Define outputs
+    laps_csv = LAPS_DIR / f"{country_lowercase}_{year}.csv"
+    pitstops_csv = LAPS_DIR / f"{country_lowercase}_{year}_pitstops.csv"
+    weather_csv = HISTORY_DIR / f"{country_lowercase}_{year}_weather.csv"
 
-    print(f"Loading {year} {race} - Race session ...")
-    session = fastf1.get_session(year, race, "R")
+    print(f"Loading {year} {country} - Race session ...")
+    
+    try:
+        # get_session automatically does fuzzy matching
+        session = fastf1.get_session(year, country, "R")
+        session.load(laps=True, telemetry=True, weather=True)
+        
+        # Access laps to check if they actually loaded; this raises DataNotLoadedError if empty/missing
+        laps: pd.DataFrame = session.laps
+        if laps.empty:
+            raise ValueError("Session laps dataframe is empty")
+    except Exception:
+        print(f"⚠️ Skipping {country} {year} — no data available yet")
+        sys.exit(0)
 
-    # Load laps + telemetry + weather in one call
-    session.load(laps=True, telemetry=True, weather=True)
+    # Make sure output directories exist
+    LAPS_DIR.mkdir(parents=True, exist_ok=True)
+    HISTORY_DIR.mkdir(parents=True, exist_ok=True)
 
-    laps: pd.DataFrame = session.laps
+    # ── 1. Full laps CSV ─────────────────────────────────────────────────────
+    available_laps = [col for col in COLUMNS if col in laps.columns]
+    missing_laps = [col for col in COLUMNS if col not in laps.columns]
+    if missing_laps:
+        print(f"  [WARN] Lap columns not found and skipped: {missing_laps}")
 
-    # ── Full laps CSV ────────────────────────────────────────────────────────
-    available = [col for col in COLUMNS if col in laps.columns]
-    missing   = [col for col in COLUMNS if col not in laps.columns]
-    if missing:
-        print(f"  [WARN] Columns not found and skipped: {missing}")
+    df_laps = laps[available_laps].copy()
+    df_laps.to_csv(laps_csv, index=False)
+    print(f"[OK] {len(df_laps)} laps saved to: {laps_csv.relative_to(ROOT_DIR)}")
 
-    df = laps[available].copy()
+    # ── 2. Pitstops CSV ──────────────────────────────────────────────────────
+    available_pit = [col for col in PITSTOP_COLUMNS if col in laps.columns]
+    missing_pit = [col for col in PITSTOP_COLUMNS if col not in laps.columns]
+    if missing_pit:
+        print(f"  [WARN] Pitstop columns not found and skipped: {missing_pit}")
 
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    df.to_csv(output_csv, index=False)
-
-    print(f"\n[OK] {len(df)} laps saved to: {output_csv.relative_to(ROOT_DIR)}")
-    print(f"     Columns : {list(df.columns)}")
-    print(f"     Drivers : {sorted(df['Driver'].unique())}")
-
-    # ── Pitstops CSV ─────────────────────────────────────────────────────────
-    pit_available = [col for col in PITSTOP_COLUMNS if col in laps.columns]
-    pit_missing   = [col for col in PITSTOP_COLUMNS if col not in laps.columns]
-    if pit_missing:
-        print(f"  [WARN] Pitstop columns not found and skipped: {pit_missing}")
-
-    # Filter to rows where PitInTime is not null — these are actual pit laps
-    pitstops_df = laps[laps["PitInTime"].notna()][pit_available].copy()
+    pitstops_df = laps[laps["PitInTime"].notna()][available_pit].copy()
     pitstops_df.to_csv(pitstops_csv, index=False)
-
     print(f"[OK] {len(pitstops_df)} pit-stop laps saved to: {pitstops_csv.relative_to(ROOT_DIR)}")
-    print(f"     Columns : {list(pitstops_df.columns)}")
 
-    return df
+    # ── 3. Weather CSV ───────────────────────────────────────────────────────
+    weather: pd.DataFrame = session.weather_data
+    available_weather = [col for col in WEATHER_COLUMNS if col in weather.columns]
+    missing_weather = [col for col in WEATHER_COLUMNS if col not in weather.columns]
+    if missing_weather:
+        print(f"  [WARN] Weather columns not found and skipped: {missing_weather}")
 
-
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Fetch F1 lap data via FastF1")
-    parser.add_argument("--year", type=int,  default=2025,            help="Season year (default: 2025)")
-    parser.add_argument("--race", type=str,  default="Monaco Grand Prix", help="Race name (default: Monaco Grand Prix)")
-    parser.add_argument("--out",  type=str,  default="monaco_2025",   help="Output CSV stem (default: monaco_2025)")
-    return parser.parse_args()
+    df_weather = weather[available_weather].copy()
+    df_weather.to_csv(weather_csv, index=False)
+    print(f"[OK] {len(df_weather)} weather rows saved to: {weather_csv.relative_to(ROOT_DIR)}")
 
 
 if __name__ == "__main__":
-    args = parse_args()
-    fetch_laps(year=args.year, race=args.race, out=args.out)
+    # The prompt requires: accepts two command line arguments: year and country
+    # E.g. python fetch_laps.py 2025 Monaco
+    parser = argparse.ArgumentParser(description="Fetch F1 lap, pitstop, and weather data via FastF1")
+    parser.add_argument("year", type=int, help="Season year")
+    parser.add_argument("country", type=str, help="Race country / event name")
+    
+    args = parser.parse_args()
+    fetch_data(year=args.year, country=args.country)

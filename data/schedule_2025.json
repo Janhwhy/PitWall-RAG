@@ -1,0 +1,170 @@
+[
+    {
+        "round": 1,
+        "country": "Australia",
+        "location": "Melbourne",
+        "date": "2025-03-16",
+        "session_name": "Race"
+    },
+    {
+        "round": 2,
+        "country": "China",
+        "location": "Shanghai",
+        "date": "2025-03-23",
+        "session_name": "Race"
+    },
+    {
+        "round": 3,
+        "country": "Japan",
+        "location": "Suzuka",
+        "date": "2025-04-06",
+        "session_name": "Race"
+    },
+    {
+        "round": 4,
+        "country": "Bahrain",
+        "location": "Sakhir",
+        "date": "2025-04-13",
+        "session_name": "Race"
+    },
+    {
+        "round": 5,
+        "country": "Saudi Arabia",
+        "location": "Jeddah",
+        "date": "2025-04-20",
+        "session_name": "Race"
+    },
+    {
+        "round": 6,
+        "country": "United States",
+        "location": "Miami Gardens",
+        "date": "2025-05-04",
+        "session_name": "Race"
+    },
+    {
+        "round": 7,
+        "country": "Italy",
+        "location": "Imola",
+        "date": "2025-05-18",
+        "session_name": "Race"
+    },
+    {
+        "round": 8,
+        "country": "Monaco",
+        "location": "Monaco",
+        "date": "2025-05-25",
+        "session_name": "Race"
+    },
+    {
+        "round": 9,
+        "country": "Spain",
+        "location": "Barcelona",
+        "date": "2025-06-01",
+        "session_name": "Race"
+    },
+    {
+        "round": 10,
+        "country": "Canada",
+        "location": "Montr\u00e9al",
+        "date": "2025-06-15",
+        "session_name": "Race"
+    },
+    {
+        "round": 11,
+        "country": "Austria",
+        "location": "Spielberg",
+        "date": "2025-06-29",
+        "session_name": "Race"
+    },
+    {
+        "round": 12,
+        "country": "United Kingdom",
+        "location": "Silverstone",
+        "date": "2025-07-06",
+        "session_name": "Race"
+    },
+    {
+        "round": 13,
+        "country": "Belgium",
+        "location": "Spa-Francorchamps",
+        "date": "2025-07-27",
+        "session_name": "Race"
+    },
+    {
+        "round": 14,
+        "country": "Hungary",
+        "location": "Budapest",
+        "date": "2025-08-03",
+        "session_name": "Race"
+    },
+    {
+        "round": 15,
+        "country": "Netherlands",
+        "location": "Zandvoort",
+        "date": "2025-08-31",
+        "session_name": "Race"
+    },
+    {
+        "round": 16,
+        "country": "Italy",
+        "location": "Monza",
+        "date": "2025-09-07",
+        "session_name": "Race"
+    },
+    {
+        "round": 17,
+        "country": "Azerbaijan",
+        "location": "Baku",
+        "date": "2025-09-21",
+        "session_name": "Race"
+    },
+    {
+        "round": 18,
+        "country": "Singapore",
+        "location": "Marina Bay",
+        "date": "2025-10-05",
+        "session_name": "Race"
+    },
+    {
+        "round": 19,
+        "country": "United States",
+        "location": "Austin",
+        "date": "2025-10-19",
+        "session_name": "Race"
+    },
+    {
+        "round": 20,
+        "country": "Mexico",
+        "location": "Mexico City",
+        "date": "2025-10-26",
+        "session_name": "Race"
+    },
+    {
+        "round": 21,
+        "country": "Brazil",
+        "location": "S\u00e3o Paulo",
+        "date": "2025-11-09",
+        "session_name": "Race"
+    },
+    {
+        "round": 22,
+        "country": "United States",
+        "location": "Las Vegas",
+        "date": "2025-11-22",
+        "session_name": "Race"
+    },
+    {
+        "round": 23,
+        "country": "Qatar",
+        "location": "Lusail",
+        "date": "2025-11-30",
+        "session_name": "Race"
+    },
+    {
+        "round": 24,
+        "country": "United Arab Emirates",
+        "location": "Yas Island",
+        "date": "2025-12-07",
+        "session_name": "Race"
+    }
+]
