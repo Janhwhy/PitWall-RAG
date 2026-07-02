@@ -6,3 +6,5 @@ faster-whisper
 python-dotenv
 yt-dlp
 groq
+fastapi
+uvicorn[standard]

@@ -189,3 +189,77 @@ class Orchestrator:
         )
 
         return unified_answer
+
+    def run_with_details(self, query: str) -> tuple[str, list[dict]]:
+        """
+        Like run(), but also returns the raw per-agent result dictionaries so
+        callers can surface individual agent answers and chunk counts.
+
+        Parameters
+        ----------
+        query : str
+            The user question/query text.
+
+        Returns
+        -------
+        tuple of (str, list of dict)
+            - The synthesised final answer string.
+            - A list of agent result dicts, each containing "agent", "answer",
+              and "chunks_used" keys (same structure as BaseAgent.run() output).
+        """
+        # ── 1. Route to Specialist Agents ────────────────────────────────────
+        selected_agents = self.route(query)
+
+        # ── 2. Run Selected Agents in Parallel ───────────────────────────────
+        agent_results: list[dict] = []
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = {executor.submit(agent.run, query): agent for agent in selected_agents}
+            for future in concurrent.futures.as_completed(futures):
+                agent = futures[future]
+                try:
+                    result = future.result()
+                    agent_results.append(result)
+                except Exception as exc:
+                    print(f"[ERROR] Orchestrator: Agent '{agent.name}' failed with exception: {exc}")
+
+        if not agent_results:
+            return "I don't have enough data to answer that.", []
+
+        # ── 3. Synthesize Final Unified Response ─────────────────────────────
+        system_prompt = (
+            "You are PitWall, the master F1 race strategy orchestrator. "
+            "Your job is to synthesize reports from various specialist strategy agents into "
+            "a single, unified, cohesive, and precise answer for the user.\n\n"
+            "RULES:\n"
+            "1. Base your answer ONLY on the provided specialist reports.\n"
+            "2. Ensure all insights are consolidated logically, removing duplicate or contradictory information.\n"
+            "3. Cite the specialist agents that provided the information using inline tags where appropriate, "
+            "e.g., [tyre_agent], [weather_agent], [radio_agent], [rivals_agent], [circuit_agent].\n"
+            "4. If the specialist reports contain insufficient information to answer the question, or if all reports returned "
+            "\"I don't have enough data to answer that.\", you must output exactly: \"I don't have enough data to answer that.\"\n"
+            "5. Be concise and write in a professional, race-engineer style."
+        )
+
+        reports_str = ""
+        for res in agent_results:
+            agent_name = res.get("agent", "unknown_agent")
+            answer = res.get("answer", "No response.")
+            chunks = res.get("chunks_used", 0)
+            reports_str += f"### Specialist Report from {agent_name} (using {chunks} context chunks):\n"
+            reports_str += f"{answer}\n\n"
+
+        user_prompt = (
+            "## Specialist Reports Received\n\n"
+            f"{reports_str}"
+            "---\n\n"
+            "## User Question\n"
+            f"{query}\n\n"
+            "Please synthesize the specialist reports into a single, unified answer."
+        )
+
+        unified_answer = ask_groq(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+        )
+
+        return unified_answer, agent_results
