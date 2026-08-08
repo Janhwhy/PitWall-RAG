@@ -5,6 +5,14 @@
 # API imports. Deploying with this file instead keeps the Render build
 # smaller/faster and the runtime memory footprint lower.
 #
+# IMPORTANT: install CPU-only torch BEFORE this file (see render.yaml's
+# buildCommand). On Linux, plain `pip install sentence-transformers` pulls
+# torch's default CUDA build (multi-GB, drags in nvidia-cublas/cudnn/etc.)
+# which alone blows past a 512MB Render instance. Installing
+# `torch --index-url https://download.pytorch.org/whl/cpu` first makes
+# sentence-transformers' install see torch's requirement already satisfied
+# and skip the CUDA build.
+#
 # Re-run ingest scripts locally with `pip install -r requirements.txt`.
 fastapi
 uvicorn[standard]
