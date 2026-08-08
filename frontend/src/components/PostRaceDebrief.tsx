@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getDebrief, getPitStops, getRaceStats } from '../lib/api';
 import type { BriefCard, PitStopLogEntry, RaceStats } from '../lib/api';
+import { Panel, PanelHeader, StatRow } from './Panel';
 
 interface PostRaceDebriefProps {
   selectedRace: string;
@@ -76,10 +77,9 @@ const PostRaceDebrief = ({ selectedRace }: PostRaceDebriefProps) => {
 
   return (
     <div className="flex flex-col gap-gutter">
-      {/* Data Bento Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
-        {/* Main Strategy Card (Suboptimal Calls) */}
-        <div className="md:col-span-8 bg-background-surface rim-border rounded-xl p-6 md:p-8 flex flex-col group">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+        {/* Suboptimal Calls — the AI audit headline, gets the accent */}
+        <Panel accent="red" className="md:col-span-8 p-6 md:p-8 flex flex-col" as="section">
           <div className="flex items-center gap-3 mb-4">
             <span className="material-symbols-outlined text-f1-red">warning</span>
             <h3 className="font-headline-md text-headline-md text-white uppercase tracking-tight">Suboptimal Calls</h3>
@@ -90,77 +90,55 @@ const PostRaceDebrief = ({ selectedRace }: PostRaceDebriefProps) => {
           <div className="mt-auto pt-4 flex justify-end">
             <span className="bg-f1-red/10 text-f1-red px-3 py-1 rounded-sm font-telemetry-sm uppercase tracking-widest border border-f1-red/20 text-[10px]">AI AUDIT</span>
           </div>
-        </div>
+        </Panel>
 
-        {/* Performance Chip */}
-        <div className="md:col-span-4 bg-background-surface rim-border rounded-xl p-6 md:p-8 flex flex-col justify-between">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-telemetry-sm text-telemetry-sm uppercase tracking-widest font-bold text-on-surface">Key Metrics</h3>
-            <span className="material-symbols-outlined text-secondary text-sm">analytics</span>
-          </div>
-          <div className="space-y-6">
-            <div>
-              <div className="flex justify-between text-[10px] font-telemetry-sm uppercase tracking-widest mb-1 text-secondary">
-                <span>Avg Lap Time</span>
-                <span className="text-white">{stats?.avg_lap_seconds != null ? fmtSeconds(stats.avg_lap_seconds) : 'N/A'}</span>
-              </div>
-              <div className="h-2 bg-surface-container-low w-full overflow-hidden rounded-sm border border-border-rim">
-                <div className="h-full bg-f1-red w-[88%]"></div>
-              </div>
+        {/* Key Metrics */}
+        <Panel className="md:col-span-4 overflow-hidden" as="section">
+          <PanelHeader icon="analytics" title="Key Metrics" />
+          <StatRow label="Avg Lap Time" value={stats?.avg_lap_seconds != null ? fmtSeconds(stats.avg_lap_seconds) : 'N/A'} />
+          <StatRow
+            label="Fastest Pit Stop"
+            value={stats?.fastest_pitstop ? `${stats.fastest_pitstop.duration_seconds.toFixed(1)}s` : 'N/A'}
+            valueClass="text-status-go"
+          />
+          <StatRow label="Total Pit Stops" value={stats?.total_pitstops ?? 0} last />
+        </Panel>
+      </div>
+
+      {/* Tire Degradation + Decisive Moment — one panel, two readouts */}
+      <Panel as="section" className="overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="p-6 md:p-8 md:border-r border-border-rim/60">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="material-symbols-outlined text-secondary">tire_repair</span>
+              <h3 className="font-headline-md text-headline-md text-white uppercase tracking-tight">Tire Degradation</h3>
             </div>
-            <div>
-              <div className="flex justify-between text-[10px] font-telemetry-sm uppercase tracking-widest mb-1 text-secondary">
-                <span>Fastest Pit Stop</span>
-                <span className="text-white">{stats?.fastest_pitstop ? `${stats.fastest_pitstop.duration_seconds.toFixed(1)}s` : 'N/A'}</span>
-              </div>
-              <div className="h-2 bg-surface-container-low w-full overflow-hidden rounded-sm border border-border-rim">
-                <div className="h-full bg-status-go w-[94%]"></div>
-              </div>
+            <div className="text-body-sm text-secondary leading-relaxed h-28 overflow-y-auto custom-scrollbar mb-4 whitespace-pre-wrap">
+              {loading ? <div className="animate-pulse h-full bg-surface-variant rounded" /> : (tyreDegCard ? tyreDegCard.answer : "No data")}
             </div>
-            <div>
-              <div className="flex justify-between text-[10px] font-telemetry-sm uppercase tracking-widest mb-1 text-secondary">
-                <span>Total Pit Stops</span>
-                <span className="text-white">{stats?.total_pitstops ?? 0}</span>
-              </div>
-              <div className="h-2 bg-surface-container-low w-full overflow-hidden rounded-sm border border-border-rim">
-                <div className="h-full bg-f1-red w-[72%]"></div>
-              </div>
+            <p className="font-telemetry-sm text-[10px] text-f1-red pt-4 border-t border-border-rim/60 uppercase tracking-widest">
+              MOST USED: {stats?.most_used_compound?.compound ?? 'N/A'}
+            </p>
+          </div>
+
+          <div className="p-6 md:p-8 border-t md:border-t-0 border-border-rim/60">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="material-symbols-outlined text-secondary">electric_bolt</span>
+              <h3 className="font-headline-md text-headline-md text-white uppercase tracking-tight">Decisive Moment</h3>
+            </div>
+            <div className="text-body-sm text-secondary leading-relaxed h-28 overflow-y-auto custom-scrollbar whitespace-pre-wrap">
+              {loading ? <div className="animate-pulse h-full bg-surface-variant rounded" /> : (decisiveCard ? decisiveCard.answer : "No data")}
             </div>
           </div>
         </div>
+      </Panel>
 
-        {/* Tire Wear Reality */}
-        <div className="md:col-span-4 bg-background-surface rim-border rounded-xl p-6 md:p-8 flex flex-col">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="material-symbols-outlined text-secondary">tire_repair</span>
-            <h3 className="font-headline-md text-headline-md text-white uppercase tracking-tight">Tire Degradation</h3>
-          </div>
-          <div className="text-body-sm text-secondary leading-relaxed h-32 overflow-y-auto custom-scrollbar mb-4 whitespace-pre-wrap">
-            {loading ? <div className="animate-pulse h-full bg-surface-variant rounded" /> : (tyreDegCard ? tyreDegCard.answer : "No data")}
-          </div>
-          <p className="font-telemetry-sm text-[10px] text-f1-red mt-auto pt-4 border-t border-border-rim uppercase tracking-widest">
-            MOST USED: {stats?.most_used_compound?.compound ?? 'N/A'}
-          </p>
-        </div>
-
-        {/* Decisive Moment */}
-        <div className="md:col-span-8 bg-background-surface rim-border rounded-xl p-6 md:p-8 flex flex-col">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="material-symbols-outlined text-secondary">electric_bolt</span>
-            <h3 className="font-headline-md text-headline-md text-white uppercase tracking-tight">Decisive Moment</h3>
-          </div>
-          <div className="text-body-sm text-secondary leading-relaxed h-32 overflow-y-auto custom-scrollbar whitespace-pre-wrap">
-            {loading ? <div className="animate-pulse h-full bg-surface-variant rounded" /> : (decisiveCard ? decisiveCard.answer : "No data")}
-          </div>
-        </div>
-      </section>
-
-      {/* Pit Stop Table Section */}
-      <section className="bg-background-surface rim-border rounded-xl overflow-hidden mt-4">
-        <div className="p-4 md:px-6 flex items-center justify-between border-b border-border-rim">
-          <div className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-secondary text-sm">settings_backup_restore</span>
-            <h4 className="font-telemetry-sm text-telemetry-sm uppercase tracking-widest font-bold text-on-surface">PIT STOP LOG</h4>
+      {/* Pit Stop Log */}
+      <Panel as="section" className="overflow-hidden">
+        <div className="px-5 py-3.5 flex items-center justify-between border-b border-border-rim/60">
+          <div className="flex items-center gap-2.5">
+            <span className="material-symbols-outlined text-secondary text-[17px]">settings_backup_restore</span>
+            <h4 className="font-telemetry-sm text-[10.5px] uppercase tracking-[0.16em] font-semibold text-on-surface">Pit Stop Log</h4>
           </div>
           <button
             onClick={exportCSV}
@@ -172,7 +150,7 @@ const PostRaceDebrief = ({ selectedRace }: PostRaceDebriefProps) => {
         </div>
         <div className="overflow-x-auto max-h-[400px] custom-scrollbar">
           <table className="w-full text-left">
-            <thead className="bg-surface-container-low sticky top-0 z-10 border-b border-border-rim">
+            <thead className="bg-surface-container-low/60 sticky top-0 z-10 border-b border-border-rim/60">
               <tr>
                 <th className="py-4 px-6 font-telemetry-sm text-[10px] text-secondary uppercase tracking-widest">DRIVER</th>
                 <th className="py-4 px-6 font-telemetry-sm text-[10px] text-secondary uppercase tracking-widest">LAP</th>
@@ -183,7 +161,7 @@ const PostRaceDebrief = ({ selectedRace }: PostRaceDebriefProps) => {
             </thead>
             <tbody>
               {pitStops.map((row) => (
-                <tr key={`${row.driver}-${row.lap_number}`} className="border-b border-border-rim last:border-0 hover:bg-surface-container-low transition-colors">
+                <tr key={`${row.driver}-${row.lap_number}`} className="border-b border-border-rim/40 last:border-0 hover:bg-surface-container-low/60 transition-colors">
                   <td className="py-4 px-6 font-telemetry-md text-white uppercase">{row.driver}</td>
                   <td className="py-4 px-6 font-telemetry-md text-secondary">{row.lap_number}</td>
                   <td className="py-4 px-6">
@@ -214,7 +192,7 @@ const PostRaceDebrief = ({ selectedRace }: PostRaceDebriefProps) => {
             </tbody>
           </table>
         </div>
-      </section>
+      </Panel>
     </div>
   );
 };
