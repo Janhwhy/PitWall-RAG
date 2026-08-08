@@ -10,6 +10,7 @@ Run with:
 """
 
 import logging
+import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,10 +30,17 @@ app = FastAPI(
 )
 
 # ── CORS ────────────────────────────────────────────────────────────────────
-# Allow all origins so the React (or any other) frontend can call the API.
+# CORS_ORIGINS is a comma-separated allowlist (e.g. the Vercel frontend URL).
+# Defaults to "*" so local dev keeps working with no env var set.
+_cors_origins_env = os.getenv("CORS_ORIGINS", "*")
+cors_origins = (
+    ["*"] if _cors_origins_env.strip() == "*"
+    else [origin.strip() for origin in _cors_origins_env.split(",") if origin.strip()]
+)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

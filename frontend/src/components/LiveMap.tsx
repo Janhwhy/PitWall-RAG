@@ -95,8 +95,8 @@ const LiveMap = ({ selectedRace }: LiveMapProps) => {
             </div>
           </div>
         ) : (
-          <iframe 
-            src="http://localhost:3000" 
+          <iframe
+            src={import.meta.env.VITE_F1DASH_URL || 'http://localhost:3000'}
             title="f1-dash Live Map Telemetry"
             className="w-full h-full border-0"
           />

@@ -1,0 +1,15 @@
+# Slim dependency set for the deployed FastAPI service (api/main.py).
+#
+# The full requirements.txt also covers the offline ingest pipeline
+# (fastf1, faster-whisper, yt-dlp, anthropic), none of which the running
+# API imports. Deploying with this file instead keeps the Render build
+# smaller/faster and the runtime memory footprint lower.
+#
+# Re-run ingest scripts locally with `pip install -r requirements.txt`.
+fastapi
+uvicorn[standard]
+chromadb
+sentence-transformers
+groq
+python-dotenv
+pandas
