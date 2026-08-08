@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PitWall | Races</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "surface-container": "#201f20",
+                  "on-tertiary-fixed-variant": "#003ea7",
+                  "surface-dim": "#131314",
+                  "on-surface": "#e5e2e3",
+                  "background-base": "#0a0a0b",
+                  "on-tertiary-fixed": "#00174a",
+                  "status-go": "#00d21d",
+                  "on-primary": "#680200",
+                  "secondary-fixed": "#e5e2e1",
+                  "f1-red": "#e10600",
+                  "on-primary-fixed-variant": "#930300",
+                  "error-container": "#93000a",
+                  "on-error-container": "#ffdad6",
+                  "surface-variant": "#353436",
+                  "error": "#ffb4ab",
+                  "surface-tint": "#ffb4a8",
+                  "tertiary-container": "#0163ff",
+                  "tertiary-fixed": "#dbe1ff",
+                  "secondary": "#c8c6c5",
+                  "primary-fixed-dim": "#ffb4a8",
+                  "inverse-primary": "#c00500",
+                  "on-primary-fixed": "#410100",
+                  "outline": "#af8781",
+                  "status-caution": "#fffb00",
+                  "surface-bright": "#3a393a",
+                  "on-primary-container": "#fff2f0",
+                  "primary": "#ffb4a8",
+                  "on-tertiary-container": "#f4f4ff",
+                  "on-background": "#e5e2e3",
+                  "inverse-surface": "#e5e2e3",
+                  "background": "#131314",
+                  "secondary-fixed-dim": "#c8c6c5",
+                  "surface-container-high": "#2a2a2b",
+                  "on-secondary-fixed-variant": "#474746",
+                  "background-surface-elevated": "#1c1c1c",
+                  "on-secondary-container": "#b7b5b4",
+                  "outline-variant": "#5e3f3a",
+                  "on-surface-variant": "#e9bcb5",
+                  "border-rim": "rgba(255, 255, 255, 0.08)",
+                  "f1-red-hover": "#e8001d",
+                  "glass-overlay": "rgba(16, 16, 18, 0.7)",
+                  "on-secondary-fixed": "#1b1b1b",
+                  "primary-container": "#e10600",
+                  "on-secondary": "#313030",
+                  "primary-fixed": "#ffdad4",
+                  "inverse-on-surface": "#313031",
+                  "surface-container-low": "#1c1b1c",
+                  "tertiary": "#b4c5ff",
+                  "surface-container-highest": "#353436",
+                  "tertiary-fixed-dim": "#b4c5ff",
+                  "on-error": "#690005",
+                  "background-surface": "#111114",
+                  "on-tertiary": "#002a77",
+                  "surface-container-lowest": "#0e0e0f",
+                  "surface": "#131314",
+                  "status-stop": "#ff1801",
+                  "secondary-container": "#474746"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "spacing": {
+                  "sidebar-width": "240px",
+                  "topbar-height": "48px",
+                  "margin-mobile": "16px",
+                  "base": "8px",
+                  "gutter": "16px",
+                  "margin-desktop": "32px"
+          },
+          "fontFamily": {
+                  "body-sm": ["Inter"],
+                  "body-md": ["Inter"],
+                  "telemetry-lg": ["JetBrains Mono"],
+                  "headline-md": ["Space Grotesk"],
+                  "telemetry-md": ["JetBrains Mono"],
+                  "body-lg": ["Inter"],
+                  "headline-xl": ["Space Grotesk"],
+                  "telemetry-sm": ["JetBrains Mono"],
+                  "headline-lg": ["Space Grotesk"]
+          },
+          "fontSize": {
+                  "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                  "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                  "telemetry-lg": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
+                  "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                  "telemetry-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                  "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                  "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "telemetry-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                  "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0a0a0b;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #353436;
+      border-radius: 10px;
+    }
+    .rim-lit {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-effect {
+      background: rgba(16, 16, 18, 0.7);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-background-base text-on-surface font-body-md min-h-screen selection:bg-f1-red selection:text-white">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-sidebar-width hidden md:flex flex-col bg-background-base border-r border-border-rim z-50">
+<div class="p-6">
+<h1 class="font-headline-md text-headline-md font-bold text-f1-red tracking-tight">PITWALL</h1>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Home</span>
+</a>
+<a class="bg-surface-variant text-f1-red border-l-4 border-f1-red px-4 py-3 flex items-center gap-3 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-body-md text-body-md">Races</span>
+</a>
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-body-md text-body-md">Standings</span>
+</a>
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-body-md text-body-md">Strategy Chat</span>
+</a>
+</nav>
+<div class="px-4 py-6 border-t border-border-rim space-y-2">
+<div class="flex items-center gap-3 px-4 py-2 mb-4">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border border-border-rim">
+<img class="w-full h-full object-cover" data-alt="A professional profile portrait of a race strategist in a high-tech dark environment, illuminated by red and white dashboard lights. The person wears a sleek technical headset and focuses on data screens. The background is a blurred Formula 1 garage with carbon fiber textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCftZ2vHGxCcUHzQp4cvBBbgrfE_LBws_0RUPrXkS24fYhD0FDijIjXxTkDAQjZduk_n0dcKOTIeFhE8_uQfjR8RMBJvUwuz0B5QIzX5hgndxHZm_Qvs3wMwm6hJ5pRMWMobZ9VBBgpb5bitAliVxoz5iIGpi2J5vpD1pxLkFfu0RxiHWuVPvjYnWfFGVgSx5lK6M1ZfBbF4W5gS9xvI2s--rnWITC6oF48p2pMjDeAWwRJrN1WrXhbvg"/>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-bold">Pit Commander</p>
+<p class="text-[10px] text-f1-red uppercase tracking-widest">Strategy Active</p>
+</div>
+</div>
+<a class="text-secondary hover:bg-surface-container px-4 py-2 flex items-center gap-3 text-xs transition-all" href="#">
+<span class="material-symbols-outlined text-sm">terminal</span>
+<span>System Logs</span>
+</a>
+<a class="text-secondary hover:bg-surface-container px-4 py-2 flex items-center gap-3 text-xs transition-all" href="#">
+<span class="material-symbols-outlined text-sm">help_outline</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="md:ml-sidebar-width flex flex-col min-h-screen pb-20 md:pb-0">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-topbar-height px-margin-mobile md:px-margin-desktop w-full bg-glass-overlay backdrop-blur-md border-b border-border-rim sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-headline-md text-headline-md tracking-tighter text-f1-red font-bold">2025 SEASON</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center gap-2 text-status-go animate-pulse">
+<span class="material-symbols-outlined text-sm">sensors</span>
+<span class="font-telemetry-sm text-telemetry-sm uppercase tracking-widest">Live Status: Uplink Stable</span>
+</div>
+<button class="flex items-center gap-2 bg-f1-red text-white px-3 py-1 rounded-sm font-telemetry-sm text-telemetry-sm hover:bg-f1-red-hover transition-all scale-95 active:opacity-80">
+<span class="material-symbols-outlined text-sm">settings</span>
+<span>CONFIGURE</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<section class="p-margin-mobile md:p-margin-desktop max-w-6xl mx-auto w-full flex-1">
+<!-- Season Progress / Hero Header -->
+<div class="mb-10 grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="md:col-span-2 space-y-2">
+<h2 class="font-headline-xl text-headline-xl text-on-surface uppercase italic tracking-tighter">Grand Prix Calendar</h2>
+<p class="text-secondary font-body-lg text-body-lg max-w-2xl">Visualizing the 2025/2026 World Championship trail. High-intensity strategic planning for every corner, ogni accelerazione.</p>
+</div>
+<div class="rim-lit bg-background-surface p-4 flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="text-secondary font-telemetry-sm text-telemetry-sm uppercase">Next Deployment</span>
+<span class="material-symbols-outlined text-f1-red">timer</span>
+</div>
+<div class="mt-2">
+<p class="font-telemetry-lg text-headline-lg leading-tight">04D : 12H : 08M</p>
+<p class="text-f1-red font-telemetry-sm text-telemetry-sm uppercase">Australia GP • Albert Park</p>
+</div>
+</div>
+</div>
+<!-- Race List Section -->
+<div class="space-y-4">
+<!-- Australia -->
+<div class="rim-lit bg-background-surface hover:bg-surface-container-low transition-colors duration-200 group relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-f1-red"></div>
+<div class="flex flex-col md:flex-row md:items-center p-4 gap-4 md:gap-8">
+<div class="flex items-center gap-4 min-w-[120px]">
+<span class="font-telemetry-lg text-headline-md text-f1-red opacity-50">01</span>
+<div>
+<p class="text-secondary font-telemetry-sm text-telemetry-sm uppercase tracking-widest">ROUND</p>
+<p class="font-telemetry-md text-telemetry-md">2025</p>
+</div>
+</div>
+<div class="flex-1 flex items-center gap-4">
+<div class="w-10 h-7 bg-surface-variant flex items-center justify-center overflow-hidden border border-border-rim rounded-sm">
+<img class="w-full h-full object-cover" data-alt="Close up high-resolution texture of the Australian flag waving slightly in the wind. The lighting is dramatic and moody, with high contrast between the blue background and white stars, maintaining the dark performance aesthetic of the UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8X2btmpPHh8NI5dzRBpoERqU1zJXwaW4g7mUVX2TG_nnyWFW9GWoQebFP8Bb2sh30I3roYyHZZ-fPTQh8SRUUyUafEV2eBr0tyEreLzbdnjUxQQsY0jPfdMrNF2jqzDZruliaykaR16CWc0rj0YHkIKkHI3BVuguKXcp9HPAbfuDrlEQgxcJozoPmo7wxiQwgWjYWJ0zBBwmGcenEU6bbLaDmpblguh6mS45-dRScZhD4qxUxmFirQw"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md uppercase tracking-tight group-hover:text-f1-red transition-colors">Australia</h3>
+<p class="text-secondary font-body-sm text-body-sm">Albert Park Circuit, Melbourne</p>
+</div>
+</div>
+<div class="flex flex-col md:items-end min-w-[150px]">
+<p class="font-telemetry-md text-telemetry-md text-on-surface">14 MAR — 16 MAR</p>
+<span class="text-status-go font-telemetry-sm text-telemetry-sm uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">fiber_manual_record</span>
+                ACTIVE ENTRIES
+              </span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rim-lit hover:bg-f1-red transition-all">
+<span class="material-symbols-outlined text-xl">map</span>
+</button>
+<button class="p-2 rim-lit hover:bg-f1-red transition-all">
+<span class="material-symbols-outlined text-xl">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Austria -->
+<div class="rim-lit bg-background-surface hover:bg-surface-container-low transition-colors duration-200 group relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-center p-4 gap-4 md:gap-8">
+<div class="flex items-center gap-4 min-w-[120px]">
+<span class="font-telemetry-lg text-headline-md text-secondary opacity-30">02</span>
+<div>
+<p class="text-secondary font-telemetry-sm text-telemetry-sm uppercase tracking-widest">ROUND</p>
+<p class="font-telemetry-md text-telemetry-md">2025</p>
+</div>
+</div>
+<div class="flex-1 flex items-center gap-4">
+<div class="w-10 h-7 bg-surface-variant flex items-center justify-center overflow-hidden border border-border-rim rounded-sm">
+<img class="w-full h-full object-cover" data-alt="High-contrast close up of the Austrian national flag, focusing on the vibrant red and white stripes. The fabric is clean and technical, with studio lighting that emphasizes the bold red tones consistent with the F1 brand colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCou0QXAUwKSPqzrOJRztWsrfr7xCklcK4tqJbY2GHP5KkZhUscpfxIrB5qj1r8pLkd1ACW_6drPAQR5EVgud7DemUwf5Xpu70uju2wPuhLkB3tOuCyLfBmVnbOSCDZ60Mfo_wyhb9EtGg1jblxH0sfOIJ9d-1F3I-35zBrzYcvf0stmTKHIuGwOawP8tdz_nO-YaBbbxTrtpYWgzyNEyJXgZRhwMa5NYgkqWJbkLvwf8LiS0NmnoYwfA"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md uppercase tracking-tight group-hover:text-f1-red transition-colors">Austria</h3>
+<p class="text-secondary font-body-sm text-body-sm">Red Bull Ring, Spielberg</p>
+</div>
+</div>
+<div class="flex flex-col md:items-end min-w-[150px]">
+<p class="font-telemetry-md text-telemetry-md text-on-surface">27 JUN — 29 JUN</p>
+<span class="text-secondary font-telemetry-sm text-telemetry-sm uppercase">Upcoming</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rim-lit hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-xl">map</span>
+</button>
+<button class="p-2 rim-lit hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-xl">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Canada -->
+<div class="rim-lit bg-background-surface hover:bg-surface-container-low transition-colors duration-200 group relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-center p-4 gap-4 md:gap-8">
+<div class="flex items-center gap-4 min-w-[120px]">
+<span class="font-telemetry-lg text-headline-md text-secondary opacity-30">03</span>
+<div>
+<p class="text-secondary font-telemetry-sm text-telemetry-sm uppercase tracking-widest">ROUND</p>
+<p class="font-telemetry-md text-telemetry-md">2025</p>
+</div>
+</div>
+<div class="flex-1 flex items-center gap-4">
+<div class="w-10 h-7 bg-surface-variant flex items-center justify-center overflow-hidden border border-border-rim rounded-sm">
+<img class="w-full h-full object-cover" data-alt="Macro shot of the Canadian flag's maple leaf against its white and red background. The image has a metallic, technical sheen, with sharp edges and high contrast, fitting a high-performance telemetry dashboard aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA42_9mN7iTntMRoJSB2ee6Kaqu1FL62MRltolo_i5BiJsd4qZaWD2xj0GdsuWG9D6zky6kWeUjJ4t5Vathv7wRrulQwdRt3-BptpAKy4cfHH4fxjwnRFsEsW8gJ2TlxiQSpCPhRZhKCUUhzcEcZeDnIfs-nASANYi4mVPayf17LiSM4i23qBYkF1UJoZRbfG9wBDkUs8RmhykBlQC3wONe1a7LXNcVDA6lLE6SfIQrR8mcLc2PnyaS2Q"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md uppercase tracking-tight group-hover:text-f1-red transition-colors">Canada</h3>
+<p class="text-secondary font-body-sm text-body-sm">Circuit Gilles Villeneuve, Montreal</p>
+</div>
+</div>
+<div class="flex flex-col md:items-end min-w-[150px]">
+<p class="font-telemetry-md text-telemetry-md text-on-surface">13 JUN — 15 JUN</p>
+<span class="text-secondary font-telemetry-sm text-telemetry-sm uppercase">Upcoming</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rim-lit hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-xl">map</span>
+</button>
+<button class="p-2 rim-lit hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-xl">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- China -->
+<div class="rim-lit bg-background-surface hover:bg-surface-container-low transition-colors duration-200 group relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-center p-4 gap-4 md:gap-8">
+<div class="flex items-center gap-4 min-w-[120px]">
+<span class="font-telemetry-lg text-headline-md text-secondary opacity-30">04</span>
+<div>
+<p class="text-secondary font-telemetry-sm text-telemetry-sm uppercase tracking-widest">ROUND</p>
+<p class="font-telemetry-md text-telemetry-md">2025</p>
+</div>
+</div>
+<div class="flex-1 flex items-center gap-4">
+<div class="w-10 h-7 bg-surface-variant flex items-center justify-center overflow-hidden border border-border-rim rounded-sm">
+<img class="w-full h-full object-cover" data-alt="A stylized, high-contrast close-up of the Chinese national flag, focusing on the golden stars against the deep red field. The lighting is cinematic, with shadows and highlights that suggest a dark, premium digital atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYa_S9tseoFWYDxtjgNpYvhIp5EtBzpyEAo6fdXePd_C5Due5-Vgr_5xcBsxefqaR2ze-ZAqVY6rlkyN8aFA-yRzY_p9HvwjF1ga5p4YZy_feWhALLX79IMx3u9B3PygNPKHTs6vjidxFq7g2TH86P2YJNbRsuN9F9C6DToXM1D-OvnOUd_YcHGSLzrmW-lIgsAae30zixTRpQ3WTtoD7dEAZ44fExKbBtTZJT1tvlvbqtS5VPdIVjfw"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md uppercase tracking-tight group-hover:text-f1-red transition-colors">China</h3>
+<p class="text-secondary font-body-sm text-body-sm">Shanghai International Circuit, Shanghai</p>
+</div>
+</div>
+<div class="flex flex-col md:items-end min-w-[150px]">
+<p class="font-telemetry-md text-telemetry-md text-on-surface">21 MAR — 23 MAR</p>
+<span class="text-secondary font-telemetry-sm text-telemetry-sm uppercase">Upcoming</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rim-lit hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-xl">map</span>
+</button>
+<button class="p-2 rim-lit hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-xl">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Japan -->
+<div class="rim-lit bg-background-surface hover:bg-surface-container-low transition-colors duration-200 group relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-center p-4 gap-4 md:gap-8">
+<div class="flex items-center gap-4 min-w-[120px]">
+<span class="font-telemetry-lg text-headline-md text-secondary opacity-30">05</span>
+<div>
+<p class="text-secondary font-telemetry-sm text-telemetry-sm uppercase tracking-widest">ROUND</p>
+<p class="font-telemetry-md text-telemetry-md">2025</p>
+</div>
+</div>
+<div class="flex-1 flex items-center gap-4">
+<div class="w-10 h-7 bg-surface-variant flex items-center justify-center overflow-hidden border border-border-rim rounded-sm">
+<img class="w-full h-full object-cover" data-alt="Minimalist macro shot of the Japanese flag, focusing on the bold red circle against a crisp white background. The image is rendered with a clean, high-tech aesthetic, using dramatic side lighting to give it depth and texture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXEly1aaWmRdsvxaYSLfYkIu0DRBEZ7j47m69gW89ejfZDGtORi45yxm3jGLEPQ0KXRKTK2Pd7r_tfOZyb418wWbgL0AMM79dZVePPwTel5qy0W1jdpr1MtUtT6-0DibUXBARGgURSQvXpLn7WL7I7bt4b-r-yip_zihVf0etnUgvaB2Eutmw-_ZmPOVQNvq_hqZWdUtZwIIH5eR2QKJmvrZyv6nJEcdZ5JMZShhQ4-1rVz3AkkO_ohw"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md uppercase tracking-tight group-hover:text-f1-red transition-colors">Japan</h3>
+<p class="text-secondary font-body-sm text-body-sm">Suzuka International Racing Course, Suzuka</p>
+</div>
+</div>
+<div class="flex flex-col md:items-end min-w-[150px]">
+<p class="font-telemetry-md text-telemetry-md text-on-surface">04 APR — 06 APR</p>
+<span class="text-secondary font-telemetry-sm text-telemetry-sm uppercase">Upcoming</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rim-lit hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-xl">map</span>
+</button>
+<button class="p-2 rim-lit hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-xl">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Monaco -->
+<div class="rim-lit bg-background-surface hover:bg-surface-container-low transition-colors duration-200 group relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-center p-4 gap-4 md:gap-8">
+<div class="flex items-center gap-4 min-w-[120px]">
+<span class="font-telemetry-lg text-headline-md text-secondary opacity-30">06</span>
+<div>
+<p class="text-secondary font-telemetry-sm text-telemetry-sm uppercase tracking-widest">ROUND</p>
+<p class="font-telemetry-md text-telemetry-md">2025</p>
+</div>
+</div>
+<div class="flex-1 flex items-center gap-4">
+<div class="w-10 h-7 bg-surface-variant flex items-center justify-center overflow-hidden border border-border-rim rounded-sm">
+<img class="w-full h-full object-cover" data-alt="High-contrast close up of the flag of Monaco, with its clean red and white halves. The image is captured with a shallow depth of field, emphasizing the crisp line where the two colors meet, against a dark, industrial background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyiNq9fK0AZaU3LWsR_sNwhxd1r2k6ZVAVTQpIvu7ogFgwUta1dC1tYJB08vKlvNKqpn5saEB8j0ybjVkdU05YVwwC3lfPCSWSLHOr2-aQAYpEOFnZEJtsxYhrN42lnwmp99LHvmM994V-m8Z9kbd7c1uJJ4ACmGqNIojOVyxPZdMNff4Gkm5_FXx1EtLRtByq0J1P3HGkOYPiDb4jYQt_M914dhy2WXiFlZ9w-t41qkKfcFw36-_2LQ"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md uppercase tracking-tight group-hover:text-f1-red transition-colors">Monaco</h3>
+<p class="text-secondary font-body-sm text-body-sm">Circuit de Monaco, Monte Carlo</p>
+</div>
+</div>
+<div class="flex flex-col md:items-end min-w-[150px]">
+<p class="font-telemetry-md text-telemetry-md text-on-surface">23 MAY — 25 MAY</p>
+<span class="text-secondary font-telemetry-sm text-telemetry-sm uppercase">Upcoming</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rim-lit hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-xl">map</span>
+</button>
+<button class="p-2 rim-lit hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-xl">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Info -->
+<div class="mt-12 p-6 rim-lit glass-effect rounded-lg flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-3xl text-f1-red">info</span>
+<div>
+<p class="font-body-md text-body-md font-bold uppercase tracking-tight">Strategy Note</p>
+<p class="text-secondary text-xs">Dates and times are subject to local FIA regulations. Ensure your telemetry sync is active for live updates.</p>
+</div>
+</div>
+<button class="w-full md:w-auto px-6 py-3 bg-f1-red text-white font-headline-md text-body-md uppercase tracking-widest hover:bg-f1-red-hover transition-all">
+          Sync Calendar
+        </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 md:hidden bg-glass-overlay backdrop-blur-lg border-t border-border-rim flex justify-around items-center h-16 pb-safe px-4">
+<a class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-body-sm text-[10px] uppercase tracking-tighter mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-f1-red active:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">flag</span>
+<span class="font-body-sm text-[10px] uppercase tracking-tighter mt-1">Races</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-body-sm text-[10px] uppercase tracking-tighter mt-1">Standings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-body-sm text-[10px] uppercase tracking-tighter mt-1">Chat</span>
+</a>
+</nav>
+<script>
+    // Micro-interaction for list items
+    document.querySelectorAll('.rim-lit').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.borderColor = 'rgba(225, 6, 0, 0.4)';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+      });
+    });
+  </script>
+</body></html>

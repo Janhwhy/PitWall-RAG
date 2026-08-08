@@ -1,0 +1,267 @@
+{
+  "year": 2025,
+  "round": 24,
+  "drivers": [
+    {
+      "position": 1,
+      "driver_code": "NOR",
+      "full_name": "Lando Norris",
+      "team": "McLaren",
+      "points": 423.0,
+      "wins": 7,
+      "nationality": "British"
+    },
+    {
+      "position": 2,
+      "driver_code": "VER",
+      "full_name": "Max Verstappen",
+      "team": "Red Bull",
+      "points": 421.0,
+      "wins": 8,
+      "nationality": "Dutch"
+    },
+    {
+      "position": 3,
+      "driver_code": "PIA",
+      "full_name": "Oscar Piastri",
+      "team": "McLaren",
+      "points": 410.0,
+      "wins": 7,
+      "nationality": "Australian"
+    },
+    {
+      "position": 4,
+      "driver_code": "RUS",
+      "full_name": "George Russell",
+      "team": "Mercedes",
+      "points": 319.0,
+      "wins": 2,
+      "nationality": "British"
+    },
+    {
+      "position": 5,
+      "driver_code": "LEC",
+      "full_name": "Charles Leclerc",
+      "team": "Ferrari",
+      "points": 242.0,
+      "wins": 0,
+      "nationality": "Monegasque"
+    },
+    {
+      "position": 6,
+      "driver_code": "HAM",
+      "full_name": "Lewis Hamilton",
+      "team": "Ferrari",
+      "points": 156.0,
+      "wins": 0,
+      "nationality": "British"
+    },
+    {
+      "position": 7,
+      "driver_code": "ANT",
+      "full_name": "Andrea Kimi Antonelli",
+      "team": "Mercedes",
+      "points": 150.0,
+      "wins": 0,
+      "nationality": "Italian"
+    },
+    {
+      "position": 8,
+      "driver_code": "ALB",
+      "full_name": "Alexander Albon",
+      "team": "Williams",
+      "points": 73.0,
+      "wins": 0,
+      "nationality": "Thai"
+    },
+    {
+      "position": 9,
+      "driver_code": "SAI",
+      "full_name": "Carlos Sainz",
+      "team": "Williams",
+      "points": 64.0,
+      "wins": 0,
+      "nationality": "Spanish"
+    },
+    {
+      "position": 10,
+      "driver_code": "ALO",
+      "full_name": "Fernando Alonso",
+      "team": "Aston Martin",
+      "points": 56.0,
+      "wins": 0,
+      "nationality": "Spanish"
+    },
+    {
+      "position": 11,
+      "driver_code": "HUL",
+      "full_name": "Nico Hülkenberg",
+      "team": "Sauber",
+      "points": 51.0,
+      "wins": 0,
+      "nationality": "German"
+    },
+    {
+      "position": 12,
+      "driver_code": "HAD",
+      "full_name": "Isack Hadjar",
+      "team": "RB F1 Team",
+      "points": 51.0,
+      "wins": 0,
+      "nationality": "French"
+    },
+    {
+      "position": 13,
+      "driver_code": "BEA",
+      "full_name": "Oliver Bearman",
+      "team": "Haas F1 Team",
+      "points": 41.0,
+      "wins": 0,
+      "nationality": "British"
+    },
+    {
+      "position": 14,
+      "driver_code": "LAW",
+      "full_name": "Liam Lawson",
+      "team": "Red Bull",
+      "points": 38.0,
+      "wins": 0,
+      "nationality": "New Zealander"
+    },
+    {
+      "position": 15,
+      "driver_code": "OCO",
+      "full_name": "Esteban Ocon",
+      "team": "Haas F1 Team",
+      "points": 38.0,
+      "wins": 0,
+      "nationality": "French"
+    },
+    {
+      "position": 16,
+      "driver_code": "STR",
+      "full_name": "Lance Stroll",
+      "team": "Aston Martin",
+      "points": 33.0,
+      "wins": 0,
+      "nationality": "Canadian"
+    },
+    {
+      "position": 17,
+      "driver_code": "TSU",
+      "full_name": "Yuki Tsunoda",
+      "team": "RB F1 Team",
+      "points": 33.0,
+      "wins": 0,
+      "nationality": "Japanese"
+    },
+    {
+      "position": 18,
+      "driver_code": "GAS",
+      "full_name": "Pierre Gasly",
+      "team": "Alpine F1 Team",
+      "points": 22.0,
+      "wins": 0,
+      "nationality": "French"
+    },
+    {
+      "position": 19,
+      "driver_code": "BOR",
+      "full_name": "Gabriel Bortoleto",
+      "team": "Sauber",
+      "points": 19.0,
+      "wins": 0,
+      "nationality": "Brazilian"
+    },
+    {
+      "position": 20,
+      "driver_code": "COL",
+      "full_name": "Franco Colapinto",
+      "team": "Alpine F1 Team",
+      "points": 0.0,
+      "wins": 0,
+      "nationality": "Argentine"
+    },
+    {
+      "position": 21,
+      "driver_code": "DOO",
+      "full_name": "Jack Doohan",
+      "team": "Alpine F1 Team",
+      "points": 0.0,
+      "wins": 0,
+      "nationality": "Australian"
+    }
+  ],
+  "constructors": [
+    {
+      "position": 1,
+      "team": "McLaren",
+      "points": 833.0,
+      "wins": 14,
+      "nationality": "British"
+    },
+    {
+      "position": 2,
+      "team": "Mercedes",
+      "points": 469.0,
+      "wins": 2,
+      "nationality": "German"
+    },
+    {
+      "position": 3,
+      "team": "Red Bull",
+      "points": 451.0,
+      "wins": 8,
+      "nationality": "Austrian"
+    },
+    {
+      "position": 4,
+      "team": "Ferrari",
+      "points": 398.0,
+      "wins": 0,
+      "nationality": "Italian"
+    },
+    {
+      "position": 5,
+      "team": "Williams",
+      "points": 137.0,
+      "wins": 0,
+      "nationality": "British"
+    },
+    {
+      "position": 6,
+      "team": "RB F1 Team",
+      "points": 92.0,
+      "wins": 0,
+      "nationality": "Italian"
+    },
+    {
+      "position": 7,
+      "team": "Aston Martin",
+      "points": 89.0,
+      "wins": 0,
+      "nationality": "British"
+    },
+    {
+      "position": 8,
+      "team": "Haas F1 Team",
+      "points": 79.0,
+      "wins": 0,
+      "nationality": "American"
+    },
+    {
+      "position": 9,
+      "team": "Sauber",
+      "points": 70.0,
+      "wins": 0,
+      "nationality": "Swiss"
+    },
+    {
+      "position": 10,
+      "team": "Alpine F1 Team",
+      "points": 22.0,
+      "wins": 0,
+      "nationality": "French"
+    }
+  ]
+}

@@ -14,7 +14,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import ask, brief, debrief, status
+from api.routes import ask, brief, debrief, pitstops, races, race_stats, results, schedule, standings, status, weather
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 logger = logging.getLogger(__name__)
@@ -43,6 +43,13 @@ app.include_router(status.router, tags=["Health"])
 app.include_router(ask.router, tags=["Strategy"])
 app.include_router(brief.router, tags=["Strategy"])
 app.include_router(debrief.router, tags=["Strategy"])
+app.include_router(races.router, tags=["Strategy"])
+app.include_router(race_stats.router, tags=["Strategy"])
+app.include_router(results.router, tags=["Strategy"])
+app.include_router(pitstops.router, tags=["Strategy"])
+app.include_router(weather.router, tags=["Strategy"])
+app.include_router(schedule.router, tags=["Schedule"])
+app.include_router(standings.router, tags=["Standings"])
 
 
 # ── Startup event ───────────────────────────────────────────────────────────

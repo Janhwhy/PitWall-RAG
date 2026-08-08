@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@100..900&display=swap" rel="stylesheet"/>
+<title>PITWALL | Monaco GP Weekend</title>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-overlay {
+            background: rgba(16, 16, 18, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .rim-light {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0a0a0b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #353436;
+            border-radius: 10px;
+        }
+        .f1-red-gradient {
+            background: linear-gradient(135deg, #e10600 0%, #930300 100%);
+        }
+        .active-tab-indicator {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #e10600;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container": "#201f20",
+                      "on-tertiary-fixed-variant": "#003ea7",
+                      "surface-dim": "#131314",
+                      "on-surface": "#e5e2e3",
+                      "background-base": "#0a0a0b",
+                      "on-tertiary-fixed": "#00174a",
+                      "status-go": "#00d21d",
+                      "on-primary": "#680200",
+                      "secondary-fixed": "#e5e2e1",
+                      "f1-red": "#e10600",
+                      "on-primary-fixed-variant": "#930300",
+                      "error-container": "#93000a",
+                      "on-error-container": "#ffdad6",
+                      "surface-variant": "#353436",
+                      "error": "#ffb4ab",
+                      "surface-tint": "#ffb4a8",
+                      "tertiary-container": "#0163ff",
+                      "tertiary-fixed": "#dbe1ff",
+                      "secondary": "#c8c6c5",
+                      "primary-fixed-dim": "#ffb4a8",
+                      "inverse-primary": "#c00500",
+                      "on-primary-fixed": "#410100",
+                      "outline": "#af8781",
+                      "status-caution": "#fffb00",
+                      "surface-bright": "#3a393a",
+                      "on-primary-container": "#fff2f0",
+                      "primary": "#ffb4a8",
+                      "on-tertiary-container": "#f4f4ff",
+                      "on-background": "#e5e2e3",
+                      "inverse-surface": "#e5e2e3",
+                      "background": "#131314",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "surface-container-high": "#2a2a2b",
+                      "on-secondary-fixed-variant": "#474746",
+                      "background-surface-elevated": "#1c1c1c",
+                      "on-secondary-container": "#b7b5b4",
+                      "outline-variant": "#5e3f3a",
+                      "on-surface-variant": "#e9bcb5",
+                      "border-rim": "rgba(255, 255, 255, 0.08)",
+                      "f1-red-hover": "#e8001d",
+                      "glass-overlay": "rgba(16, 16, 18, 0.7)",
+                      "on-secondary-fixed": "#1b1b1b",
+                      "primary-container": "#e10600",
+                      "on-secondary": "#313030",
+                      "primary-fixed": "#ffdad4",
+                      "inverse-on-surface": "#313031",
+                      "surface-container-low": "#1c1b1c",
+                      "tertiary": "#b4c5ff",
+                      "surface-container-highest": "#353436",
+                      "tertiary-fixed-dim": "#b4c5ff",
+                      "on-error": "#690005",
+                      "background-surface": "#111114",
+                      "on-tertiary": "#002a77",
+                      "surface-container-lowest": "#0e0e0f",
+                      "surface": "#131314",
+                      "status-stop": "#ff1801",
+                      "secondary-container": "#474746"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sidebar-width": "240px",
+                      "topbar-height": "48px",
+                      "margin-mobile": "16px",
+                      "base": "8px",
+                      "gutter": "16px",
+                      "margin-desktop": "32px"
+              },
+              "fontFamily": {
+                      "body-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "telemetry-lg": ["JetBrains Mono"],
+                      "headline-md": ["Space Grotesk"],
+                      "telemetry-md": ["JetBrains Mono"],
+                      "body-lg": ["Inter"],
+                      "headline-xl": ["Space Grotesk"],
+                      "telemetry-sm": ["JetBrains Mono"],
+                      "headline-lg": ["Space Grotesk"]
+              },
+              "fontSize": {
+                      "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "telemetry-lg": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "telemetry-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "telemetry-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background-base text-on-surface font-body-md custom-scrollbar selection:bg-f1-red selection:text-white">
+<!-- Top Navigation Bar -->
+<header class="bg-glass-overlay backdrop-blur-md border-b border-border-rim docked full-width top-0 sticky z-50 flex justify-between items-center h-topbar-height px-margin-mobile md:px-margin-desktop w-full">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-f1-red tracking-tight">PITWALL</span>
+<div class="hidden md:flex h-6 w-px bg-surface-variant mx-2"></div>
+<span class="hidden md:block font-telemetry-sm text-telemetry-sm uppercase tracking-widest text-secondary opacity-70">Monaco Grand Prix 2024</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-lg border border-border-rim">
+<span class="w-2 h-2 rounded-full bg-status-go animate-pulse"></span>
+<span class="font-telemetry-sm text-telemetry-sm uppercase">Live Status</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary hover:text-f1-red-hover transition-colors cursor-pointer scale-95 active:opacity-80 transition-all" data-icon="sensors">sensors</span>
+<span class="material-symbols-outlined text-secondary hover:text-f1-red-hover transition-colors cursor-pointer scale-95 active:opacity-80 transition-all" data-icon="settings">settings</span>
+</div>
+</div>
+</header>
+<div class="flex min-h-[calc(100vh-48px)]">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-sidebar-width hidden md:flex flex-col bg-background-base border-r border-border-rim pt-12 z-40">
+<div class="flex flex-col h-full py-base">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl overflow-hidden rim-light">
+<img class="w-full h-full object-cover" data-alt="A professional race strategist profile portrait in a high-tech dark pit wall environment, wearing a sleek black headset, moody cinematic lighting with red neon highlights, 8k resolution, photorealistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDE-XR2a9azMg4rDnPaI0a0xrSNlcIyd1eUPC0Flr2vc0_3xGl8ywb29QJRo04OO_VtT0wdD_Djxw2jig9buyTcKlwQYVHfYlb_qj-5ig9bEnSWf6ZpsI-hBBtPV3RhhIVLKxpTuwJ7KN71z-dLZ-nD1m3ZxwDXXeYVgMYbB4p3-qlX07EfZeucYKZ8MUyjXzbfokQGLziiVKDej42VirvSHtwqmEctABrc1Usg6uTJUJm0qlsIxNZobg"/>
+</div>
+<div>
+<p class="font-body-md text-body-md font-bold text-on-surface">Pit Commander</p>
+<p class="font-body-sm text-body-sm text-f1-red uppercase tracking-tighter">Strategy Active</p>
+</div>
+</div>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Home</span>
+</a>
+<a class="bg-surface-variant text-f1-red border-l-4 border-f1-red px-4 py-3 flex items-center gap-3 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-body-md text-body-md">Races</span>
+</a>
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-body-md text-body-md">Standings</span>
+</a>
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-body-md text-body-md">Strategy Chat</span>
+</a>
+</nav>
+<div class="mt-auto pb-8 space-y-1 border-t border-border-rim pt-4">
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-body-md text-body-md">System Logs</span>
+</a>
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-grow ml-0 md:ml-sidebar-width p-margin-mobile md:p-margin-desktop bg-background-base custom-scrollbar pb-24 md:pb-8">
+<!-- Hero Banner / Identity -->
+<section class="mb-gutter relative overflow-hidden rounded-xl rim-light h-48 md:h-64 flex flex-col justify-end p-6 md:p-8">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-40" data-alt="A wide angle high-speed cinematic view of the Monaco Grand Prix harbor circuit during sunset. Sparkling blue Mediterranean water, luxury yachts, and the historic Monte Carlo architecture in the background. The scene is processed with a cool dark grading and sharp red light streaks, conveying speed and prestige." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtpzr_07OpPqVIKjR2XIyB-BLlrXXLOBLqKGgOmuanXXbR6UBJxYDjwfahQv01D-tASttkWc9Ffp083FXAC2hYP1fBcxTLGZq8aSk2n2d2XdeL0gRRpfY0HJiCO3wvV0rUqW2F2J0HnnEuv8wYY7HO73UO4007Lwr1k6jRUUy0K6B7OBEp_a2YHqbyrN20C90bP0XlzP9VlC0DJjfY61Opd92gzZNChnFAtyQLmB0OOlN0HS9i7nXa9Q"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-base via-background-base/60 to-transparent"></div>
+</div>
+<div class="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 bg-f1-red text-white text-[10px] font-bold rounded uppercase tracking-wider">Round 08</span>
+<span class="text-on-surface-variant font-telemetry-sm uppercase tracking-widest">Monte Carlo, Monaco</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl leading-tight">Formula 1 Grand Prix de Monaco 2024</h1>
+</div>
+<div class="flex gap-4">
+<div class="bg-glass-overlay rim-light p-3 rounded-lg min-w-[120px]">
+<p class="font-telemetry-sm text-[10px] text-secondary uppercase opacity-60">Race Starts In</p>
+<p class="font-telemetry-lg text-telemetry-lg text-on-surface">01:14:42</p>
+</div>
+<div class="bg-glass-overlay rim-light p-3 rounded-lg min-w-[120px]">
+<p class="font-telemetry-sm text-[10px] text-secondary uppercase opacity-60">Avg. Lap Time</p>
+<p class="font-telemetry-lg text-telemetry-lg text-f1-red">1:12.984</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Navigation Tabs -->
+<div class="relative flex items-center border-b border-border-rim mb-8">
+<nav class="flex gap-8">
+<button class="relative py-3 font-telemetry-sm text-telemetry-sm uppercase tracking-widest text-secondary hover:text-on-surface transition-colors">Results</button>
+<button class="relative py-3 font-telemetry-sm text-telemetry-sm uppercase tracking-widest text-secondary hover:text-on-surface transition-colors">Qualifying</button>
+<button class="relative py-3 font-telemetry-sm text-telemetry-sm uppercase tracking-widest text-f1-red font-bold">
+                        Pre-Race Brief
+                        <div class="active-tab-indicator"></div>
+</button>
+<button class="relative py-3 font-telemetry-sm text-telemetry-sm uppercase tracking-widest text-secondary hover:text-on-surface transition-colors">Post-Race Debrief</button>
+</nav>
+</div>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Weather Summary Panel (Left) -->
+<div class="md:col-span-4 lg:col-span-3 space-y-gutter">
+<div class="bg-background-surface rim-light p-5 rounded-xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-telemetry-sm text-telemetry-sm uppercase tracking-widest font-bold text-on-surface">Live Telemetry</h3>
+<span class="material-symbols-outlined text-f1-red" data-icon="cloud">cloud</span>
+</div>
+<div class="space-y-6">
+<div class="flex justify-between items-end border-b border-border-rim pb-3">
+<div>
+<p class="text-[10px] uppercase text-secondary mb-1">Air Temp</p>
+<p class="font-telemetry-lg text-telemetry-lg">26.4<span class="text-body-sm text-secondary ml-1">°C</span></p>
+</div>
+<div class="text-right">
+<p class="text-[10px] uppercase text-secondary mb-1">Track Temp</p>
+<p class="font-telemetry-lg text-telemetry-lg text-status-caution">34.1<span class="text-body-sm text-secondary ml-1">°C</span></p>
+</div>
+</div>
+<div class="flex justify-between items-end border-b border-border-rim pb-3">
+<div>
+<p class="text-[10px] uppercase text-secondary mb-1">Humidity</p>
+<p class="font-telemetry-lg text-telemetry-lg">58<span class="text-body-sm text-secondary ml-1">%</span></p>
+</div>
+<div class="text-right">
+<p class="text-[10px] uppercase text-secondary mb-1">Rain Risk</p>
+<p class="font-telemetry-lg text-telemetry-lg text-status-go">15<span class="text-body-sm text-secondary ml-1">%</span></p>
+</div>
+</div>
+<div>
+<p class="text-[10px] uppercase text-secondary mb-2">Wind Velocity</p>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-f1-red rotate-45" data-icon="navigation">navigation</span>
+<p class="font-telemetry-lg text-telemetry-lg">12.4 <span class="text-body-sm text-secondary">km/h NW</span></p>
+</div>
+</div>
+</div>
+</div>
+<!-- Track Map Micro-Widget -->
+<div class="bg-background-surface rim-light p-0 rounded-xl overflow-hidden aspect-square flex flex-col">
+<div class="p-4 border-b border-border-rim flex justify-between items-center">
+<span class="font-telemetry-sm text-[10px] uppercase tracking-widest">Track Layout</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="open_in_full">open_in_full</span>
+</div>
+<div class="flex-grow p-4 relative bg-[#0e0e0f] flex items-center justify-center">
+<!-- Placeholder for Track SVG -->
+<div class="w-full h-full opacity-60">
+<img class="w-full h-full object-contain" data-alt="A minimalist white-line vector technical diagram of the Circuit de Monaco track map against a deep black grid background. The map includes corner numbers and sector indicators in red, styled like a telemetry screen display." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr1at8mO9jxsuCkhJGf3TV-U73NVJZg7XwhPdeywgkLqcAuGZ-jEzM-gORtJrTT4Bfr4xccYFgZW6pst95B3lxUX2lRQa8xL0hdIYrW248nTLmPESfbicELJ4pXaQZUnvuGTk1YkhkeBuHCxbev8sQF0pP-wUm2078RV5XVQDkMS0H_1Zxe9IQJgGKT6rP52RVr4-Fkr5vEIB82ZfQialZzUI7XmLqUHIqY1EYggkcUTLKqB-YRW89Nw"/>
+</div>
+<div class="absolute top-4 left-4 flex flex-col gap-1">
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-f1-red"></span>
+<span class="text-[9px] uppercase font-bold">DRS Zone 1</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-status-go"></span>
+<span class="text-[9px] uppercase font-bold">Sector 1 Finish</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Strategy Cards (Main Feed) -->
+<div class="md:col-span-8 lg:col-span-9 space-y-gutter">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface">AI Strategy Intelligence</h2>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-f1-red text-white rounded font-telemetry-sm uppercase tracking-widest text-[10px] font-bold hover:bg-f1-red-hover transition-all">Regenerate Analysis</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Card 1: Tyre Intelligence -->
+<div class="bg-background-surface rim-light p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="slow_motion_video">slow_motion_video</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-8 h-8 rounded bg-f1-red/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-f1-red text-sm" data-icon="tire_repair">tire_repair</span>
+</div>
+<h4 class="font-telemetry-sm text-telemetry-sm uppercase tracking-widest font-bold">Tyre Degradation Model</h4>
+</div>
+<p class="text-body-md text-secondary mb-6 leading-relaxed">Soft compounds (C5) showing higher-than-expected graining on the rear-left. Expected drop-off at lap 18. Switch to Mediums (C4) recommended for a long middle stint.</p>
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-surface-container p-2 rounded border border-border-rim">
+<p class="text-[9px] uppercase text-secondary opacity-60">Soft Life</p>
+<p class="font-telemetry-md text-status-stop">18 Laps</p>
+</div>
+<div class="bg-surface-container p-2 rounded border border-border-rim">
+<p class="text-[9px] uppercase text-secondary opacity-60">Medium Life</p>
+<p class="font-telemetry-md text-status-caution">34 Laps</p>
+</div>
+<div class="bg-surface-container p-2 rounded border border-border-rim">
+<p class="text-[9px] uppercase text-secondary opacity-60">Hard Life</p>
+<p class="font-telemetry-md text-status-go">48 Laps</p>
+</div>
+</div>
+</div>
+<!-- Card 2: Weather Dynamics -->
+<div class="bg-background-surface rim-light p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="thunderstorm">thunderstorm</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-8 h-8 rounded bg-tertiary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="cloud_sync">cloud_sync</span>
+</div>
+<h4 class="font-telemetry-sm text-telemetry-sm uppercase tracking-widest font-bold">Weather Dynamics</h4>
+</div>
+<p class="text-body-md text-secondary mb-6 leading-relaxed">Convective cells forming 12km West. Prediction models suggest a 35% probability of light showers during the final 15 laps. Keep Inters ready in the pit stall.</p>
+<div class="flex items-center justify-between p-3 bg-surface-container rounded border border-border-rim">
+<span class="text-[10px] uppercase font-bold">Precipitation Window</span>
+<span class="font-telemetry-md text-f1-red">T-Minus 40m</span>
+</div>
+</div>
+<!-- Card 3: Rivals Analysis -->
+<div class="bg-background-surface rim-light p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="groups">groups</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-8 h-8 rounded bg-status-caution/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-status-caution text-sm" data-icon="monitoring">monitoring</span>
+</div>
+<h4 class="font-telemetry-sm text-telemetry-sm uppercase tracking-widest font-bold">Rivals Monitoring</h4>
+</div>
+<p class="text-body-md text-secondary mb-6 leading-relaxed">Team Red pacing +0.2s faster in Sector 2. They are vulnerable in the pit window if we execute an overcut. Watch car #16 closely on lap 15.</p>
+<div class="space-y-2">
+<div class="flex items-center justify-between text-[10px]">
+<span>RED CAR #16 GAP</span>
+<span class="text-error font-mono">+1.242s</span>
+</div>
+<div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-f1-red" style="width: 65%"></div>
+</div>
+</div>
+</div>
+<!-- Card 4: Pit Timing Optimization -->
+<div class="bg-background-surface rim-light p-6 rounded-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="timer">timer</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-8 h-8 rounded bg-status-go/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-status-go text-sm" data-icon="precision_manufacturing">precision_manufacturing</span>
+</div>
+<h4 class="font-telemetry-sm text-telemetry-sm uppercase tracking-widest font-bold">Pit Timing Engine</h4>
+</div>
+<p class="text-body-md text-secondary mb-6 leading-relaxed">Optimum pit window: Lap 17-21. Traffic modeling shows a clear gap behind the mid-field train. Stop now to avoid being boxed in behind backmarkers.</p>
+<div class="bg-[#0e0e0f] p-3 rounded rim-light">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] uppercase">Est. Pit Loss</span>
+<span class="font-telemetry-md">24.5s</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-[10px] uppercase">Pit Crew Ready</span>
+<span class="text-status-go text-[10px] font-bold">READY</span>
+</div>
+</div>
+</div>
+<!-- Card 5 (Full Width): Base Strategy Overview -->
+<div class="lg:col-span-2 bg-background-surface rim-light p-6 rounded-xl border-l-4 border-f1-red">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-f1-red" data-icon="account_tree">account_tree</span>
+<h4 class="font-telemetry-sm text-telemetry-sm uppercase tracking-widest font-bold">Master Strategy: One-Stop Aggressive</h4>
+</div>
+<span class="px-3 py-1 bg-f1-red text-white text-[10px] font-bold rounded">PRIMARY PATH</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="md:col-span-2">
+<p class="text-body-md text-secondary leading-relaxed mb-4">Monaco is track-position dominant. Priority 1: Maintain lead in S1. Priority 2: Fuel management in S3 to ensure ERS availability for main straight. If Safety Car deployment occurs before Lap 12, switch immediately to Strategy Delta (2-Stop Hard transition).</p>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full border-4 border-f1-red"></div>
+<span class="text-[10px] font-bold uppercase">SOFT Start</span>
+</div>
+<span class="material-symbols-outlined text-secondary" data-icon="arrow_forward">arrow_forward</span>
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full border-4 border-white"></div>
+<span class="text-[10px] font-bold uppercase">HARD Finish</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container rounded-lg p-4 flex flex-col justify-center gap-2">
+<p class="text-[10px] uppercase text-secondary font-bold">Confidence Interval</p>
+<div class="flex items-center gap-4">
+<span class="font-telemetry-lg text-4xl">92%</span>
+<span class="text-status-go material-symbols-outlined" data-icon="trending_up">trending_up</span>
+</div>
+<p class="text-[9px] text-secondary">Based on 1.4M simulations</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Bottom Navigation Bar (Mobile only) -->
+<footer class="fixed bottom-0 w-full z-50 md:hidden bg-glass-overlay backdrop-blur-lg border-t border-border-rim flex justify-around items-center h-16 pb-safe px-4">
+<button class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-body-sm text-body-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-f1-red active:bg-surface-variant p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="flag">flag</span>
+<span class="font-body-sm text-body-sm font-bold">Races</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-body-sm text-body-sm">Standings</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-body-sm text-body-sm">Chat</span>
+</button>
+</footer>
+<script>
+        // Micro-interactions for live status pulse and number increments
+        document.addEventListener('DOMContentLoaded', () => {
+            const countdownEl = document.querySelector('.font-telemetry-lg');
+            if(countdownEl && countdownEl.innerText.includes(':')) {
+                let timeParts = countdownEl.innerText.split(':').map(Number);
+                setInterval(() => {
+                    timeParts[2]--;
+                    if(timeParts[2] < 0) {
+                        timeParts[2] = 59;
+                        timeParts[1]--;
+                    }
+                    if(timeParts[1] < 0) {
+                        timeParts[1] = 59;
+                        timeParts[0]--;
+                    }
+                    countdownEl.innerText = timeParts.map(v => v.toString().padStart(2, '0')).join(':');
+                }, 1000);
+            }
+        });
+    </script>
+</body></html>

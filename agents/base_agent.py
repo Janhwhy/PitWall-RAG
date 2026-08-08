@@ -33,7 +33,12 @@ class BaseAgent(ABC):
         self.collections = collections
 
     @abstractmethod
-    def run(self, query: str) -> dict[str, Any]:
+    def run(
+        self,
+        query: str,
+        race: str | None = None,
+        year: int | None = None,
+    ) -> dict[str, Any]:
         """
         Abstract method to process a user query and return an agent response dictionary.
 
@@ -41,6 +46,10 @@ class BaseAgent(ABC):
         ----------
         query : str
             The user question/query text.
+        race : str | None
+            If given, scope retrieval to this race (e.g. "Monaco").
+        year : int | None
+            If given, scope retrieval to this season.
 
         Returns
         -------
@@ -55,8 +64,10 @@ class BaseAgent(ABC):
     def _retrieve(
         self,
         query: str,
-        top_k: int = 15,
+        top_k: int = 8,
         distance_threshold: float = 0.50,
+        race: str | None = None,
+        year: int | None = None,
     ) -> list[dict[str, Any]]:
         """
         Helper method to retrieve chunks from the database, constrained only to
@@ -67,9 +78,16 @@ class BaseAgent(ABC):
         query : str
             The natural language search query.
         top_k : int
-            Number of results to retrieve per collection.
+            Number of results to retrieve per collection. Kept modest (8,
+            was 15) to bound tokens-per-LLM-call — race/year scoping already
+            narrows the candidate pool to one race's data, so the correct
+            chunk reliably ranks near the top without needing a wide net.
         distance_threshold : float
             Maximum cosine distance for retrieved chunks.
+        race : str | None
+            If given, scope retrieval to this race (e.g. "Monaco").
+        year : int | None
+            If given, scope retrieval to this season.
 
         Returns
         -------
@@ -81,4 +99,6 @@ class BaseAgent(ABC):
             collections=self.collections,
             top_k=top_k,
             distance_threshold=distance_threshold,
+            race=race,
+            year=year,
         )

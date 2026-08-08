@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PITWALL | Standings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#201f20",
+                    "on-tertiary-fixed-variant": "#003ea7",
+                    "surface-dim": "#131314",
+                    "on-surface": "#e5e2e3",
+                    "background-base": "#0a0a0b",
+                    "on-tertiary-fixed": "#00174a",
+                    "status-go": "#00d21d",
+                    "on-primary": "#680200",
+                    "secondary-fixed": "#e5e2e1",
+                    "f1-red": "#e10600",
+                    "on-primary-fixed-variant": "#930300",
+                    "error-container": "#93000a",
+                    "on-error-container": "#ffdad6",
+                    "surface-variant": "#353436",
+                    "error": "#ffb4ab",
+                    "surface-tint": "#ffb4a8",
+                    "tertiary-container": "#0163ff",
+                    "tertiary-fixed": "#dbe1ff",
+                    "secondary": "#c8c6c5",
+                    "primary-fixed-dim": "#ffb4a8",
+                    "inverse-primary": "#c00500",
+                    "on-primary-fixed": "#410100",
+                    "outline": "#af8781",
+                    "status-caution": "#fffb00",
+                    "surface-bright": "#3a393a",
+                    "on-primary-container": "#fff2f0",
+                    "primary": "#ffb4a8",
+                    "on-tertiary-container": "#f4f4ff",
+                    "on-background": "#e5e2e3",
+                    "inverse-surface": "#e5e2e3",
+                    "background": "#131314",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "surface-container-high": "#2a2a2b",
+                    "on-secondary-fixed-variant": "#474746",
+                    "background-surface-elevated": "#1c1c1c",
+                    "on-secondary-container": "#b7b5b4",
+                    "outline-variant": "#5e3f3a",
+                    "on-surface-variant": "#e9bcb5",
+                    "border-rim": "rgba(255, 255, 255, 0.08)",
+                    "f1-red-hover": "#e8001d",
+                    "glass-overlay": "rgba(16, 16, 18, 0.7)",
+                    "on-secondary-fixed": "#1b1b1b",
+                    "primary-container": "#e10600",
+                    "on-secondary": "#313030",
+                    "primary-fixed": "#ffdad4",
+                    "inverse-on-surface": "#313031",
+                    "surface-container-low": "#1c1b1c",
+                    "tertiary": "#b4c5ff",
+                    "surface-container-highest": "#353436",
+                    "tertiary-fixed-dim": "#b4c5ff",
+                    "on-error": "#690005",
+                    "background-surface": "#111114",
+                    "on-tertiary": "#002a77",
+                    "surface-container-lowest": "#0e0e0f",
+                    "surface": "#131314",
+                    "status-stop": "#ff1801",
+                    "secondary-container": "#474746"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "240px",
+                    "topbar-height": "48px",
+                    "margin-mobile": "16px",
+                    "base": "8px",
+                    "gutter": "16px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "telemetry-lg": ["JetBrains Mono"],
+                    "headline-md": ["Space Grotesk"],
+                    "telemetry-md": ["JetBrains Mono"],
+                    "body-lg": ["Inter"],
+                    "headline-xl": ["Space Grotesk"],
+                    "telemetry-sm": ["JetBrains Mono"],
+                    "headline-lg": ["Space Grotesk"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .rim-light { border: 1px solid rgba(255, 255, 255, 0.08); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-blur { backdrop-filter: blur(12px); }
+        
+        /* Specific row height for condensed tables */
+        .table-row-condensed { height: 32px; }
+        
+        @media (max-width: 768px) {
+            .main-content { padding-bottom: 80px; }
+        }
+    </style>
+</head>
+<body class="bg-background-base text-on-surface font-body-md overflow-x-hidden selection:bg-f1-red selection:text-white">
+<!-- TopAppBar -->
+<header class="bg-glass-overlay backdrop-blur-md docked full-width top-0 sticky z-50 border-b border-border-rim flex justify-between items-center h-topbar-height px-margin-mobile md:px-margin-desktop w-full">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-f1-red tracking-tight">PITWALL</span>
+<div class="hidden md:flex gap-6 ml-8">
+<a class="text-on-surface-variant hover:text-f1-red-hover transition-colors font-body-sm" href="#">DASHBOARD</a>
+<a class="text-f1-red font-bold transition-colors font-body-sm" href="#">STANDINGS</a>
+<a class="text-on-surface-variant hover:text-f1-red-hover transition-colors font-body-sm" href="#">TELEMETRY</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 bg-f1-red text-white px-3 py-1 rounded-sm text-body-sm font-bold scale-95 active:opacity-80 transition-all">
+<span class="material-symbols-outlined text-[18px]">sensors</span>
+                LIVE STATUS
+            </button>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-f1-red transition-colors">settings</span>
+</div>
+</header>
+<div class="flex">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-sidebar-width hidden md:flex flex-col bg-background-base border-r border-border-rim pt-[48px] z-40">
+<div class="p-6 border-b border-border-rim">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden rim-light">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a Formula 1 race strategist in a high-tech control room environment. The lighting is cinematic with deep shadows and sharp highlights of red and cyan telemetry data reflected in the background. The strategist is wearing a sleek, dark team uniform with subtle branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzc3t9y1oHSE7QN_p7EhOesy0tetfgR_4H5vesw-Iat5OZ1JYPYDiXbLdIAAshZne7vyhKXr1EDSI9gcd5hch83XuaYARbz035cGrYJ_-xawZbGqtUPfwEPE32U3EE2CW7PPgcslIkdgecC6-suqrSP7rTi-HSllf0LDH5ON1py24dxfXxgj3qgCT8s8oBRiOIsCrwpxK_g0ms-k8B2i8I0431WsylOZNFYPFYxXslUnRsoTRjxsf4Ow"/>
+</div>
+<div>
+<p class="font-body-md font-bold">Pit Commander</p>
+<p class="text-body-sm text-status-go flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-status-go animate-pulse"></span>
+                            Strategy Active
+                        </p>
+</div>
+</div>
+</div>
+<nav class="flex-1 py-base space-y-1">
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Home
+                </a>
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+                    Races
+                </a>
+<a class="bg-surface-variant text-f1-red border-l-4 border-f1-red px-4 py-3 flex items-center gap-3 transition-all duration-200 font-bold" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+                    Standings
+                </a>
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">forum</span>
+                    Strategy Chat
+                </a>
+</nav>
+<div class="mt-auto border-t border-border-rim p-4 space-y-2">
+<a class="text-secondary hover:text-on-surface flex items-center gap-3 px-2 py-2 text-body-sm" href="#">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+                    System Logs
+                </a>
+<a class="text-secondary hover:text-on-surface flex items-center gap-3 px-2 py-2 text-body-sm" href="#">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+                    Support
+                </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-sidebar-width min-h-screen p-margin-mobile md:p-margin-desktop bg-background-base">
+<div class="max-w-6xl mx-auto space-y-8">
+<!-- Header & Toggle Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-1">
+<h1 class="font-headline-xl text-headline-xl tracking-tighter uppercase">Season Standings</h1>
+<p class="text-on-surface-variant font-telemetry-sm">UPDATED: LAP 42 / 57 • BAHRAIN GRAND PRIX LIVE</p>
+</div>
+<div class="inline-flex p-1 bg-surface-container-low rounded-lg rim-light">
+<button class="px-6 py-2 text-body-sm font-bold transition-all rounded-sm bg-f1-red text-white" id="btn-drivers" onclick="toggleStandings('drivers')">
+                            DRIVERS
+                        </button>
+<button class="px-6 py-2 text-body-sm font-bold transition-all rounded-sm text-secondary hover:text-on-surface" id="btn-constructors" onclick="toggleStandings('constructors')">
+                            CONSTRUCTORS
+                        </button>
+</div>
+</div>
+<!-- Standings Tables Container -->
+<div class="grid grid-cols-1 gap-gutter">
+<!-- DRIVERS VIEW (Default) -->
+<div class="space-y-6" id="drivers-standings">
+<!-- Podium / Top 3 Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- 2nd Place -->
+<div class="bg-surface-container p-6 rounded-xl rim-light relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary opacity-5 -mr-16 -mt-16 rounded-full blur-2xl"></div>
+<div class="flex justify-between items-start mb-4">
+<span class="font-telemetry-lg text-headline-md text-secondary">02</span>
+<div class="px-2 py-1 bg-surface-variant rounded-sm text-telemetry-sm uppercase">Red Bull</div>
+</div>
+<h3 class="font-headline-md text-headline-md leading-tight mb-1">SERGIO PEREZ</h3>
+<div class="flex items-end gap-2">
+<span class="font-telemetry-lg text-headline-md text-f1-red">189</span>
+<span class="text-body-sm text-on-surface-variant mb-1">PTS</span>
+</div>
+</div>
+<!-- 1st Place (Featured) -->
+<div class="bg-surface-container-high p-8 rounded-xl border-2 border-f1-red relative overflow-hidden group shadow-2xl shadow-f1-red/10">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-f1-red text-[48px] opacity-20">military_tech</span>
+</div>
+<div class="flex justify-between items-start mb-4">
+<span class="font-telemetry-lg text-headline-xl text-f1-red">01</span>
+<div class="px-3 py-1 bg-f1-red text-white rounded-sm text-telemetry-sm font-bold uppercase tracking-widest">Champion Leader</div>
+</div>
+<h3 class="font-headline-lg text-headline-lg leading-tight mb-1">MAX VERSTAPPEN</h3>
+<p class="text-on-surface-variant mb-4 font-body-md">Red Bull Racing • 12 Wins</p>
+<div class="flex items-baseline gap-2">
+<span class="font-telemetry-lg text-6xl text-on-surface">314</span>
+<span class="text-body-lg text-f1-red font-bold">PTS</span>
+</div>
+<div class="mt-6 h-1 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-f1-red w-[85%]"></div>
+</div>
+</div>
+<!-- 3rd Place -->
+<div class="bg-surface-container p-6 rounded-xl rim-light relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<span class="font-telemetry-lg text-headline-md text-secondary">03</span>
+<div class="px-2 py-1 bg-surface-variant rounded-sm text-telemetry-sm uppercase">Mercedes</div>
+</div>
+<h3 class="font-headline-md text-headline-md leading-tight mb-1">LEWIS HAMILTON</h3>
+<div class="flex items-end gap-2">
+<span class="font-telemetry-lg text-headline-md text-on-surface">148</span>
+<span class="text-body-sm text-on-surface-variant mb-1">PTS</span>
+</div>
+</div>
+</div>
+<!-- Full Drivers Table -->
+<div class="bg-surface-container-lowest rounded-xl rim-light overflow-hidden">
+<div class="overflow-x-auto no-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high text-on-surface-variant font-telemetry-sm border-b border-border-rim h-10">
+<th class="px-6 w-16">POS</th>
+<th class="px-4 w-20">CODE</th>
+<th class="px-4">DRIVER</th>
+<th class="px-4">CONSTRUCTOR</th>
+<th class="px-4 text-right">WINS</th>
+<th class="px-6 text-right">POINTS</th>
+</tr>
+</thead>
+<tbody class="font-telemetry-md">
+<!-- Rows generated for high density 32px height -->
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold text-f1-red">01</td>
+<td class="px-4 text-on-surface-variant">VER</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Max Verstappen</td>
+<td class="px-4 text-on-surface-variant">Red Bull Racing</td>
+<td class="px-4 text-right">12</td>
+<td class="px-6 text-right font-bold text-on-surface">314</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">02</td>
+<td class="px-4 text-on-surface-variant">PER</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Sergio Perez</td>
+<td class="px-4 text-on-surface-variant">Red Bull Racing</td>
+<td class="px-4 text-right">2</td>
+<td class="px-6 text-right font-bold text-on-surface">189</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">03</td>
+<td class="px-4 text-on-surface-variant">HAM</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Lewis Hamilton</td>
+<td class="px-4 text-on-surface-variant">Mercedes</td>
+<td class="px-4 text-right">0</td>
+<td class="px-6 text-right font-bold text-on-surface">148</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">04</td>
+<td class="px-4 text-on-surface-variant">ALO</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Fernando Alonso</td>
+<td class="px-4 text-on-surface-variant">Aston Martin</td>
+<td class="px-4 text-right">0</td>
+<td class="px-6 text-right font-bold text-on-surface">145</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">05</td>
+<td class="px-4 text-on-surface-variant">LEC</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Charles Leclerc</td>
+<td class="px-4 text-on-surface-variant">Ferrari</td>
+<td class="px-4 text-right">0</td>
+<td class="px-6 text-right font-bold text-on-surface">99</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">06</td>
+<td class="px-4 text-on-surface-variant">RUS</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">George Russell</td>
+<td class="px-4 text-on-surface-variant">Mercedes</td>
+<td class="px-4 text-right">0</td>
+<td class="px-6 text-right font-bold text-on-surface">99</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">07</td>
+<td class="px-4 text-on-surface-variant">SAI</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Carlos Sainz</td>
+<td class="px-4 text-on-surface-variant">Ferrari</td>
+<td class="px-4 text-right">0</td>
+<td class="px-6 text-right font-bold text-on-surface">92</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">08</td>
+<td class="px-4 text-on-surface-variant">NOR</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Lando Norris</td>
+<td class="px-4 text-on-surface-variant">McLaren</td>
+<td class="px-4 text-right">0</td>
+<td class="px-6 text-right font-bold text-on-surface">69</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- CONSTRUCTORS VIEW (Hidden by Default) -->
+<div class="hidden space-y-6" id="constructors-standings">
+<div class="bg-surface-container-lowest rounded-xl rim-light overflow-hidden">
+<div class="overflow-x-auto no-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high text-on-surface-variant font-telemetry-sm border-b border-border-rim h-10">
+<th class="px-6 w-16">POS</th>
+<th class="px-4">TEAM</th>
+<th class="px-4 text-right">WINS</th>
+<th class="px-6 text-right">POINTS</th>
+</tr>
+</thead>
+<tbody class="font-telemetry-md">
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold text-f1-red">01</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Red Bull Racing</td>
+<td class="px-4 text-right">14</td>
+<td class="px-6 text-right font-bold text-on-surface">503</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">02</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Mercedes</td>
+<td class="px-4 text-right">0</td>
+<td class="px-6 text-right font-bold text-on-surface">247</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">03</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Ferrari</td>
+<td class="px-4 text-right">0</td>
+<td class="px-6 text-right font-bold text-on-surface">191</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">04</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">Aston Martin</td>
+<td class="px-4 text-right">0</td>
+<td class="px-6 text-right font-bold text-on-surface">196</td>
+</tr>
+<tr class="table-row-condensed border-b border-border-rim hover:bg-surface-variant/30 transition-colors group">
+<td class="px-6 font-bold">05</td>
+<td class="px-4 font-headline-md text-body-md uppercase group-hover:text-f1-red">McLaren</td>
+<td class="px-4 text-right">0</td>
+<td class="px-6 text-right font-bold text-on-surface">103</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- Comparison / Stat Card Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="bg-surface-container-low p-6 rounded-xl rim-light border-l-4 border-status-go">
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-status-go">trending_up</span>
+<h4 class="font-headline-md text-body-lg font-bold">Performance Delta</h4>
+</div>
+<p class="text-on-surface-variant text-body-sm mb-6">Mercedes has closed the gap to Red Bull by <span class="text-status-go font-bold">0.142s</span> on average race pace over the last 3 sessions.</p>
+<div class="flex items-end gap-1">
+<div class="w-2 h-16 bg-surface-variant rounded-t-full"></div>
+<div class="w-2 h-24 bg-surface-variant rounded-t-full"></div>
+<div class="w-2 h-32 bg-f1-red rounded-t-full"></div>
+<div class="w-2 h-28 bg-surface-variant rounded-t-full"></div>
+<div class="w-2 h-20 bg-surface-variant rounded-t-full"></div>
+<div class="w-2 h-40 bg-f1-red rounded-t-full"></div>
+</div>
+</div>
+<div class="bg-glass-overlay backdrop-blur-lg p-6 rounded-xl rim-light relative overflow-hidden">
+<div class="flex items-center gap-4 mb-2">
+<span class="material-symbols-outlined text-f1-red">smart_toy</span>
+<h4 class="font-headline-md text-body-lg font-bold">AI Strategist Prediction</h4>
+</div>
+<p class="text-on-surface font-body-md italic border-l border-border-rim pl-4 py-2">"Current trajectory suggests Verstappen will clinch the title at the Singapore Grand Prix, 4 races before the season finale."</p>
+<div class="mt-4 flex gap-2">
+<span class="text-telemetry-sm px-2 py-1 bg-surface-container rounded border border-border-rim">CONFIDENCE: 92%</span>
+<span class="text-telemetry-sm px-2 py-1 bg-surface-container rounded border border-border-rim">DATA POINTS: 14.2M</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 md:hidden bg-glass-overlay backdrop-blur-lg border-t border-border-rim flex justify-around items-center h-16 pb-safe px-4">
+<a class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant transition-all tap-highlight-transparent" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-body-sm text-[10px]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant transition-all tap-highlight-transparent" href="#">
+<span class="material-symbols-outlined">flag</span>
+<span class="font-body-sm text-[10px]">Races</span>
+</a>
+<a class="flex flex-col items-center justify-center text-f1-red active:bg-surface-variant transition-all tap-highlight-transparent" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="font-body-sm text-[10px] font-bold">Standings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant transition-all tap-highlight-transparent" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-body-sm text-[10px]">Chat</span>
+</a>
+</nav>
+<script>
+        function toggleStandings(type) {
+            const driversView = document.getElementById('drivers-standings');
+            const constructorsView = document.getElementById('constructors-standings');
+            const btnDrivers = document.getElementById('btn-drivers');
+            const btnConstructors = document.getElementById('btn-constructors');
+
+            if (type === 'drivers') {
+                driversView.classList.remove('hidden');
+                constructorsView.classList.add('hidden');
+                btnDrivers.className = 'px-6 py-2 text-body-sm font-bold transition-all rounded-sm bg-f1-red text-white';
+                btnConstructors.className = 'px-6 py-2 text-body-sm font-bold transition-all rounded-sm text-secondary hover:text-on-surface';
+            } else {
+                driversView.classList.add('hidden');
+                constructorsView.classList.remove('hidden');
+                btnConstructors.className = 'px-6 py-2 text-body-sm font-bold transition-all rounded-sm bg-f1-red text-white';
+                btnDrivers.className = 'px-6 py-2 text-body-sm font-bold transition-all rounded-sm text-secondary hover:text-on-surface';
+            }
+        }
+    </script>
+</body></html>

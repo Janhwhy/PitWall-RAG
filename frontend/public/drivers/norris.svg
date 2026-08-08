@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="300" height="360">
+  <defs>
+    <linearGradient id="mclaren-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff8000" />
+      <stop offset="100%" stop-color="#9a3412" />
+    </linearGradient>
+    <linearGradient id="skin-norris" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fce8d5" />
+      <stop offset="100%" stop-color="#e2b291" />
+    </linearGradient>
+  </defs>
+
+  <!-- Shoulders & Upper Body Suit -->
+  <path d="M 20,360 L 35,250 C 45,200 100,185 150,185 C 200,185 255,200 265,250 L 280,360 Z" fill="url(#mclaren-orange)" />
+
+  <!-- McLaren Black/Anthracite Shoulders -->
+  <path d="M 35,250 C 70,210 100,200 150,200 C 200,200 230,210 265,250 L 280,360 L 20,360 Z" fill="#18181b" opacity="0.6" />
+
+  <!-- McLaren Speedmark Logo -->
+  <path d="M 130,240 C 145,225 170,230 175,250 C 160,245 140,245 130,240 Z" fill="#ff8000" />
+
+  <!-- Neck -->
+  <rect x="132" y="135" width="36" height="45" rx="6" fill="url(#skin-norris)" />
+
+  <!-- Face Contour -->
+  <path d="M 112,100 C 112,50 188,50 188,100 C 188,145 172,158 150,158 C 128,158 112,145 112,100 Z" fill="url(#skin-norris)" />
+
+  <!-- Norris Curls / Brown Hair -->
+  <path d="M 104,95 C 98,42 125,26 150,26 C 175,26 202,42 196,95 C 190,62 174,38 150,38 C 126,38 110,62 104,95 Z" fill="#4a2e1b" />
+  <circle cx="120" cy="46" r="12" fill="#4a2e1b" />
+  <circle cx="150" cy="34" r="14" fill="#4a2e1b" />
+  <circle cx="180" cy="46" r="12" fill="#4a2e1b" />
+
+  <!-- Eyebrows & Eyes -->
+  <path d="M 124,90 Q 134,84 142,88 M 158,88 Q 166,84 176,90" stroke="#331e10" stroke-width="3.5" fill="none" stroke-linecap="round" />
+  <circle cx="134" cy="97" r="4" fill="#1f1610" />
+  <circle cx="166" cy="97" r="4" fill="#1f1610" />
+
+  <!-- Smile & Nose -->
+  <path d="M 150,95 L 146,110 L 154,110 Z" fill="#e2b291" opacity="0.8" />
+  <path d="M 136,128 Q 150,136 164,128" stroke="#a16b46" stroke-width="3" fill="none" stroke-linecap="round" />
+</svg>

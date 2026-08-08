@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="300" height="360">
+  <defs>
+    <linearGradient id="merc-black" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+    <linearGradient id="skin-russell" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8daf0" />
+      <stop offset="100%" stop-color="#e0a98b" />
+    </linearGradient>
+  </defs>
+
+  <!-- Shoulders & Upper Body Suit -->
+  <path d="M 20,360 L 35,245 C 45,195 100,180 150,180 C 200,180 255,195 265,245 L 280,360 Z" fill="url(#merc-black)" />
+
+  <!-- Petronas Teal Accent Lines -->
+  <path d="M 30,250 C 90,230 150,225 270,250" fill="none" stroke="#00a19c" stroke-width="5" />
+
+  <!-- Mercedes Three pointed star badge on chest -->
+  <circle cx="150" cy="245" r="16" fill="#000000" stroke="#e5e7eb" stroke-width="2" />
+  <path d="M 150,231 L 150,245 M 150,245 L 138,253 M 150,245 L 162,253" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Neck -->
+  <rect x="132" y="130" width="36" height="48" rx="6" fill="url(#skin-russell)" />
+
+  <!-- Face Contour -->
+  <path d="M 112,95 C 112,45 188,45 188,95 C 188,140 172,156 150,156 C 128,156 112,140 112,95 Z" fill="url(#skin-russell)" />
+
+  <!-- Russell Slicked Brown Hair -->
+  <path d="M 108,90 C 104,38 128,20 150,20 C 172,20 196,38 192,90 C 182,50 166,30 150,30 C 134,30 118,50 108,90 Z" fill="#4a3018" />
+
+  <!-- Eyebrows & Eyes -->
+  <path d="M 124,86 Q 134,80 142,84 M 158,84 Q 166,80 176,86" stroke="#332010" stroke-width="3.5" fill="none" stroke-linecap="round" />
+  <circle cx="134" cy="94" r="4" fill="#2b506e" />
+  <circle cx="166" cy="94" r="4" fill="#2b506e" />
+
+  <!-- Nose & Smile -->
+  <path d="M 150,92 L 146,108 L 154,108 Z" fill="#e0a98b" opacity="0.8" />
+  <path d="M 136,124 Q 150,132 164,124" stroke="#a66e51" stroke-width="3" fill="none" stroke-linecap="round" />
+</svg>

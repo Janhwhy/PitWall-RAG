@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PITWALL | Strategy Chat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0a0a0b;
+            color: #e5e2e3;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(17, 17, 20, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .f1-gradient-border {
+            border-left: 4px solid #e10600;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0a0a0b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #353436;
+            border-radius: 10px;
+        }
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .live-pulse {
+            animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#201f20",
+                        "on-tertiary-fixed-variant": "#003ea7",
+                        "surface-dim": "#131314",
+                        "on-surface": "#e5e2e3",
+                        "background-base": "#0a0a0b",
+                        "on-tertiary-fixed": "#00174a",
+                        "status-go": "#00d21d",
+                        "on-primary": "#680200",
+                        "secondary-fixed": "#e5e2e1",
+                        "f1-red": "#e10600",
+                        "on-primary-fixed-variant": "#930300",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "surface-variant": "#353436",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#ffb4a8",
+                        "tertiary-container": "#0163ff",
+                        "tertiary-fixed": "#dbe1ff",
+                        "secondary": "#c8c6c5",
+                        "primary-fixed-dim": "#ffb4a8",
+                        "inverse-primary": "#c00500",
+                        "on-primary-fixed": "#410100",
+                        "outline": "#af8781",
+                        "status-caution": "#fffb00",
+                        "surface-bright": "#3a393a",
+                        "on-primary-container": "#fff2f0",
+                        "primary": "#ffb4a8",
+                        "on-tertiary-container": "#f4f4ff",
+                        "on-background": "#e5e2e3",
+                        "inverse-surface": "#e5e2e3",
+                        "background": "#131314",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "surface-container-high": "#2a2a2b",
+                        "on-secondary-fixed-variant": "#474746",
+                        "background-surface-elevated": "#1c1c1c",
+                        "on-secondary-container": "#b7b5b4",
+                        "outline-variant": "#5e3f3a",
+                        "on-surface-variant": "#e9bcb5",
+                        "border-rim": "rgba(255, 255, 255, 0.08)",
+                        "f1-red-hover": "#e8001d",
+                        "glass-overlay": "rgba(16, 16, 18, 0.7)",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "primary-container": "#e10600",
+                        "on-secondary": "#313030",
+                        "primary-fixed": "#ffdad4",
+                        "inverse-on-surface": "#313031",
+                        "surface-container-low": "#1c1b1c",
+                        "tertiary": "#b4c5ff",
+                        "surface-container-highest": "#353436",
+                        "tertiary-fixed-dim": "#b4c5ff",
+                        "on-error": "#690005",
+                        "background-surface": "#111114",
+                        "on-tertiary": "#002a77",
+                        "surface-container-lowest": "#0e0e0f",
+                        "surface": "#131314",
+                        "status-stop": "#ff1801",
+                        "secondary-container": "#474746"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar-width": "240px",
+                        "topbar-height": "48px",
+                        "margin-mobile": "16px",
+                        "base": "8px",
+                        "gutter": "16px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "telemetry-lg": ["JetBrains Mono"],
+                        "headline-md": ["Space Grotesk"],
+                        "telemetry-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Space Grotesk"],
+                        "telemetry-sm": ["JetBrains Mono"],
+                        "headline-lg": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "telemetry-lg": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "telemetry-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "telemetry-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-sidebar-width hidden md:flex flex-col bg-background-base border-r border-border-rim py-base z-50">
+<div class="px-6 py-4 flex items-center gap-2">
+<div class="w-8 h-8 bg-f1-red flex items-center justify-center rounded-sm">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+</div>
+<div>
+<h2 class="font-headline-md text-body-lg font-bold leading-none">PITWALL</h2>
+<p class="text-[10px] text-secondary uppercase tracking-widest mt-1">Race Operations</p>
+</div>
+</div>
+<nav class="mt-8 flex-grow">
+<div class="px-4 mb-4 text-[10px] font-bold text-secondary tracking-widest uppercase">Navigation</div>
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-body-lg">dashboard</span>
+<span class="font-body-md text-body-md">Home</span>
+</a>
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-body-lg">calendar_month</span>
+<span class="font-body-md text-body-md">Races</span>
+</a>
+<a class="text-secondary hover:bg-surface-container px-4 py-3 flex items-center gap-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-body-lg">leaderboard</span>
+<span class="font-body-md text-body-md">Standings</span>
+</a>
+<a class="bg-surface-variant text-f1-red border-l-4 border-f1-red px-4 py-3 flex items-center gap-3 duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-body-lg">forum</span>
+<span class="font-body-md text-body-md font-bold">Strategy Chat</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<div class="glass-card rounded-lg p-3 flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional close-up portrait of a female race strategist in her 30s with dark hair, wearing a sleek black headset and a professional team uniform. She is looking intently at a screen out of frame. The background is a blurred high-tech F1 pit wall environment with multiple data monitors glowing in shades of deep blue and red." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADUra0Zj3RDb0BGd-4o8q6yulIzN1ooD-pWXUuY0OG5XxxZ2jHd5db8soW9s7VuUkmWQuenMVu-8uXG-CIG25lJpEXgv_uNWws3QAicv8rWM2PBYWsbRGPMgeoo3qs_6cyCH53HuUjFtUHbktapoSWwDK2uipvUL63UkrrjMZYpFAclCJD4qpp2snMEO3f7IHx8FqodqZorc5FS2wNnrQWZKT_l7DPmhNyWn68JJXInygbzoGO-cDwxQ"/>
+</div>
+<div>
+<p class="font-body-md text-body-sm font-bold">Katie Pham</p>
+<p class="text-[10px] text-f1-red flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-f1-red live-pulse"></span>
+                        Strategy Active
+                    </p>
+</div>
+</div>
+<a class="text-secondary hover:bg-surface-container-high hover:text-on-surface px-4 py-2 flex items-center gap-3 rounded-md transition-all" href="#">
+<span class="material-symbols-outlined text-body-md">terminal</span>
+<span class="font-body-md text-body-md">System Logs</span>
+</a>
+<a class="text-secondary hover:bg-surface-container-high hover:text-on-surface px-4 py-2 flex items-center gap-3 rounded-md transition-all mb-4" href="#">
+<span class="material-symbols-outlined text-body-md">help_outline</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-grow md:ml-sidebar-width flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-glass-overlay backdrop-blur-md border-b border-border-rim docked full-width top-0 sticky z-40 h-topbar-height flex justify-between items-center px-margin-mobile md:px-margin-desktop w-full">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-f1-red tracking-tight">PITWALL</span>
+<div class="h-4 w-px bg-border-rim"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-f1-red text-sm live-pulse">sensors</span>
+<span class="font-telemetry-sm text-telemetry-sm text-on-surface uppercase">Live Status: Circuit de Monaco</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="scale-95 active:opacity-80 transition-all hover:text-f1-red-hover text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="hidden lg:flex items-center gap-2 px-3 py-1 bg-surface-container rounded-sm border border-border-rim">
+<span class="font-telemetry-sm text-telemetry-sm text-secondary">DELTA</span>
+<span class="font-telemetry-sm text-telemetry-sm text-status-go">+0.042s</span>
+</div>
+</div>
+</header>
+<!-- Chat Container -->
+<div class="p-margin-mobile md:p-margin-desktop max-w-6xl mx-auto w-full flex flex-col gap-gutter">
+<!-- Controls Section -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-end">
+<div class="md:col-span-3 space-y-2">
+<label class="font-telemetry-sm text-telemetry-sm text-secondary uppercase tracking-wider">Session Context</label>
+<div class="flex gap-2">
+<select class="w-full bg-background-surface border border-border-rim rounded-sm font-telemetry-md text-telemetry-md py-2 px-3 focus:border-f1-red outline-none">
+<option>2024</option>
+<option>2023</option>
+<option>2022</option>
+</select>
+<select class="w-full bg-background-surface border border-border-rim rounded-sm font-telemetry-md text-telemetry-md py-2 px-3 focus:border-f1-red outline-none">
+<option>Monaco Grand Prix</option>
+<option>Bahrain Grand Prix</option>
+<option>Spanish Grand Prix</option>
+</select>
+</div>
+</div>
+<div class="md:col-span-9 space-y-2">
+<label class="font-telemetry-sm text-telemetry-sm text-secondary uppercase tracking-wider">Strategy Query</label>
+<div class="relative">
+<input class="w-full bg-background-surface border border-border-rim rounded-sm font-body-md text-body-md py-2.5 pl-4 pr-12 focus:border-f1-red outline-none placeholder-secondary/50" placeholder="e.g. When is the optimal pit window for car 44 if rain starts on lap 25?" type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-f1-red text-white rounded-sm hover:bg-f1-red-hover transition-colors">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main Synthesized Result -->
+<div class="glass-card rounded-lg overflow-hidden relative group">
+<!-- Subtle Shader Background for AI Intensity -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+
+</div>
+<div class="p-8 relative z-10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-f1-red" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h3 class="font-headline-md text-headline-md tracking-tight">Synthesized Strategy Response</h3>
+</div>
+<div class="space-y-6">
+<p class="font-body-lg text-body-lg leading-relaxed text-on-surface">
+                            Based on current telemetry and real-time cloud data, the <span class="text-f1-red font-bold">optimal pit window</span> for Car 44 is Lap 22-26. Weather radar indicates a 72% probability of light rain starting at Lap 25. Recommendation: Fit <span class="inline-flex items-center gap-1 px-2 py-0.5 border border-[#fffb00] rounded-full text-[10px] font-bold text-[#fffb00]"><span class="w-2 h-2 rounded-full bg-[#fffb00]"></span> MEDIUM</span> tires if rain is delayed, otherwise switch directly to <span class="inline-flex items-center gap-1 px-2 py-0.5 border border-status-go rounded-full text-[10px] font-bold text-status-go"><span class="w-2 h-2 rounded-full bg-status-go"></span> INTERS</span> on Lap 24.
+                        </p>
+<div class="flex flex-wrap gap-4 items-center">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-background-base bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-f1-red">tire_repair</span>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background-base bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-f1-red">cloudy_snowing</span>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-background-base bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-f1-red">radio</span>
+</div>
+</div>
+<span class="font-telemetry-sm text-telemetry-sm text-secondary">Verified by 5 Specialized Agents</span>
+<div class="ml-auto flex items-center gap-4">
+<span class="font-telemetry-sm text-telemetry-sm text-status-go bg-status-go/10 px-2 py-1 rounded-sm">CONFIDENCE: 94%</span>
+<button class="text-secondary hover:text-white transition-colors">
+<span class="material-symbols-outlined">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Specialist Agents Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-gutter">
+<!-- Tyre Agent -->
+<div class="glass-card rounded-lg p-4 flex flex-col gap-3 group hover:border-f1-red/30 transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-f1-red/10 rounded-sm">
+<span class="material-symbols-outlined text-f1-red" style="font-variation-settings: 'FILL' 1;">tire_repair</span>
+</div>
+<span class="font-telemetry-sm text-[10px] text-secondary opacity-60">12 CHUNKS</span>
+</div>
+<h4 class="font-headline-md text-body-md font-bold uppercase tracking-wider">Tyre Analyst</h4>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-3">Soft compound degradation is exceeding expectations by 0.12s per lap. Estimated life: 18 laps.</p>
+<div class="mt-auto pt-3 border-t border-border-rim flex justify-between items-center">
+<span class="font-telemetry-sm text-[10px] text-status-go">STABLE</span>
+<button class="text-f1-red hover:underline text-[10px] font-bold">VIEW DATA</button>
+</div>
+</div>
+<!-- Weather Agent -->
+<div class="glass-card rounded-lg p-4 flex flex-col gap-3 group hover:border-f1-red/30 transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-f1-red/10 rounded-sm">
+<span class="material-symbols-outlined text-f1-red" style="font-variation-settings: 'FILL' 1;">cloudy_snowing</span>
+</div>
+<span class="font-telemetry-sm text-[10px] text-secondary opacity-60">8 CHUNKS</span>
+</div>
+<h4 class="font-headline-md text-body-md font-bold uppercase tracking-wider">Weather Desk</h4>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-3">Ambient temperature dropping. Track surface grip predicted to decrease 3% over the next 10 mins.</p>
+<div class="mt-auto pt-3 border-t border-border-rim flex justify-between items-center">
+<span class="font-telemetry-sm text-[10px] text-status-caution">CHANGING</span>
+<button class="text-f1-red hover:underline text-[10px] font-bold">RADAR</button>
+</div>
+</div>
+<!-- Radio Agent -->
+<div class="glass-card rounded-lg p-4 flex flex-col gap-3 group hover:border-f1-red/30 transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-f1-red/10 rounded-sm">
+<span class="material-symbols-outlined text-f1-red" style="font-variation-settings: 'FILL' 1;">radio</span>
+</div>
+<span class="font-telemetry-sm text-[10px] text-secondary opacity-60">24 CHUNKS</span>
+</div>
+<h4 class="font-headline-md text-body-md font-bold uppercase tracking-wider">Radio Monitoring</h4>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-3">Car 44 reporting steering vibration. Driver prefers staying out despite degradation.</p>
+<div class="mt-auto pt-3 border-t border-border-rim flex justify-between items-center">
+<span class="font-telemetry-sm text-[10px] text-status-go">ACTIVE</span>
+<button class="text-f1-red hover:underline text-[10px] font-bold">TRANSCRIPT</button>
+</div>
+</div>
+<!-- Rivals Agent -->
+<div class="glass-card rounded-lg p-4 flex flex-col gap-3 group hover:border-f1-red/30 transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-f1-red/10 rounded-sm">
+<span class="material-symbols-outlined text-f1-red" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<span class="font-telemetry-sm text-[10px] text-secondary opacity-60">15 CHUNKS</span>
+</div>
+<h4 class="font-headline-md text-body-md font-bold uppercase tracking-wider">Rival Intel</h4>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-3">Red Bull pit crew standing by. Predicted undercut attempt on Lap 19. Monitoring gap.</p>
+<div class="mt-auto pt-3 border-t border-border-rim flex justify-between items-center">
+<span class="font-telemetry-sm text-[10px] text-status-stop">THREAT</span>
+<button class="text-f1-red hover:underline text-[10px] font-bold">GAP TOOL</button>
+</div>
+</div>
+<!-- Circuit Agent -->
+<div class="glass-card rounded-lg p-4 flex flex-col gap-3 group hover:border-f1-red/30 transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-f1-red/10 rounded-sm">
+<span class="material-symbols-outlined text-f1-red" style="font-variation-settings: 'FILL' 1;">map</span>
+</div>
+<span class="font-telemetry-sm text-[10px] text-secondary opacity-60">5 CHUNKS</span>
+</div>
+<h4 class="font-headline-md text-body-md font-bold uppercase tracking-wider">Circuit Map</h4>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-3">Sector 3 yellow flag cleared. Track evolution stabilizing at 1:12.4 average.</p>
+<div class="mt-auto pt-3 border-t border-border-rim flex justify-between items-center">
+<span class="font-telemetry-sm text-[10px] text-status-go">GREEN</span>
+<button class="text-f1-red hover:underline text-[10px] font-bold">SECTORS</button>
+</div>
+</div>
+</div>
+<!-- Contextual Strategy Map / Telemetry -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<div class="lg:col-span-8 glass-card rounded-lg p-6 min-h-[300px] flex flex-col relative overflow-hidden">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline-md text-body-lg font-bold">LIVE TRACK OVERLAY</h4>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-f1-red"></span>
+<span class="font-telemetry-sm text-[10px] text-secondary">CAR 44</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-status-go"></span>
+<span class="font-telemetry-sm text-[10px] text-secondary">PIT WINDOW</span>
+</div>
+</div>
+</div>
+<div class="flex-grow flex items-center justify-center">
+<img class="w-full h-full object-contain" data-alt="A stylized technical 2D vector map of the Monaco Grand Prix circuit in a dark, telemetry-inspired aesthetic. The circuit is rendered with crisp white lines on a deep black background. Areas of the track are highlighted with pulsating red markers and translucent green zones indicating the pit entry window. Data overlays showing sector times and DRS zones are subtly integrated into the circuit layout." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfK99iOwQt38jpYdgWqIjYMqqYQLfbwdNLwoKJlpBDoaxDoIKeg6HTTZ4MAxaeSCcKVpcNE9sBAg_Eut-DmqHdAXB1Q2zFp_JI2EPulLRkIuckl_-ZxI02D9Lk_UazHQupvtusKgBUPK5__125NYiygL5-UPs87EDMm9I1y82i5BLNCcF2wZUVxsC237mtsYb3LWcBNYwEZ6impVQ26R-wbJIOFHzSMDEBDQkSHj6TmsfoTe2RTYYPYQ"/>
+</div>
+</div>
+<div class="lg:col-span-4 glass-card rounded-lg p-6 flex flex-col gap-4">
+<h4 class="font-headline-md text-body-lg font-bold uppercase">Critical Comms</h4>
+<div class="space-y-4 custom-scrollbar overflow-y-auto max-h-[250px] pr-2">
+<div class="border-l-2 border-f1-red pl-3 py-1">
+<div class="flex justify-between items-center mb-1">
+<span class="font-telemetry-sm text-[10px] font-bold text-f1-red">ENGINEER [LAP 18]</span>
+<span class="font-telemetry-sm text-[10px] text-secondary">10:42:15</span>
+</div>
+<p class="font-telemetry-md text-[13px] text-on-surface">"Box this lap, box this lap. Confirm."</p>
+</div>
+<div class="border-l-2 border-secondary pl-3 py-1 opacity-70">
+<div class="flex justify-between items-center mb-1">
+<span class="font-telemetry-sm text-[10px] font-bold text-secondary">DRIVER [LAP 18]</span>
+<span class="font-telemetry-sm text-[10px] text-secondary">10:42:22</span>
+</div>
+<p class="font-telemetry-md text-[13px] text-on-surface">"Copy, staying out one more. Tires feel okay."</p>
+</div>
+<div class="border-l-2 border-f1-red pl-3 py-1">
+<div class="flex justify-between items-center mb-1">
+<span class="font-telemetry-sm text-[10px] font-bold text-f1-red">ENGINEER [LAP 19]</span>
+<span class="font-telemetry-sm text-[10px] text-secondary">10:43:50</span>
+</div>
+<p class="font-telemetry-md text-[13px] text-on-surface">"Check tire pressures on the rears, Lewis."</p>
+</div>
+<div class="border-l-2 border-f1-red pl-3 py-1">
+<div class="flex justify-between items-center mb-1">
+<span class="font-telemetry-sm text-[10px] font-bold text-f1-red">PIT WALL [LAP 19]</span>
+<span class="font-telemetry-sm text-[10px] text-secondary">10:44:05</span>
+</div>
+<p class="font-telemetry-md text-[13px] text-on-surface">"Traffic clear for pit release."</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 md:hidden bg-glass-overlay backdrop-blur-lg border-t border-border-rim flex justify-around items-center h-16 pb-safe px-4">
+<button class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant transition-all tap-highlight-transparent p-2">
+<span class="material-symbols-outlined">home</span>
+<span class="font-body-sm text-body-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant transition-all tap-highlight-transparent p-2">
+<span class="material-symbols-outlined">flag</span>
+<span class="font-body-sm text-body-sm">Races</span>
+</button>
+<button class="flex flex-col items-center justify-center text-f1-red active:bg-surface-variant transition-all tap-highlight-transparent p-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-body-sm text-body-sm">Chat</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary active:bg-surface-variant transition-all tap-highlight-transparent p-2">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-body-sm text-body-sm">Standing</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interaction for the chat input
+        const chatInput = document.querySelector('input[type="text"]');
+        const sendBtn = chatInput?.nextElementSibling;
+
+        chatInput?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                console.log('Sending query:', chatInput.value);
+                chatInput.value = '';
+                // Logic to trigger AI re-synthesis animation would go here
+            }
+        });
+
+        // Add hover effects to agent cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

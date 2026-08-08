@@ -1,11 +1,12 @@
 """
 fetch_laps.py
 -------------
-Fetches lap, pitstop, and weather data for a specified F1 race session using the FastF1 library.
-Saves three files:
-    data/laps/{country_lowercase}_{year}.csv           - Lap data
-    data/laps/{country_lowercase}_{year}_pitstops.csv  - Pitstop data
+Fetches lap, pitstop, weather, and driver data for a specified F1 race session using the FastF1 library.
+Saves four files:
+    data/laps/{country_lowercase}_{year}.csv            - Lap data
+    data/laps/{country_lowercase}_{year}_pitstops.csv   - Pitstop data
     data/history/{country_lowercase}_{year}_weather.csv - Weather data
+    data/laps/{country_lowercase}_{year}_drivers.csv    - Driver code -> full name -> team
 
 Usage:
     python ingest/fetch_laps.py 2025 Monaco
@@ -31,6 +32,7 @@ fastf1.Cache.enable_cache(str(CACHE_DIR))
 # ── Columns to extract ─────────────────────────────────────────────────────
 COLUMNS = [
     "Driver",
+    "Team",
     "LapNumber",
     "LapTime",
     "Compound",
@@ -42,6 +44,7 @@ COLUMNS = [
 
 PITSTOP_COLUMNS = [
     "Driver",
+    "Team",
     "LapNumber",
     "PitInTime",
     "PitOutTime",
@@ -59,6 +62,17 @@ WEATHER_COLUMNS = [
     "WindSpeed",
 ]
 
+# session.results columns -> our drivers.csv columns. Only Driver codes are
+# stored anywhere else in the pipeline (laps/pitstops), so full names have
+# to come from here or the app has no grounded way to answer "who is X" /
+# "who won" without the LLM guessing a name from its own pretrained bias.
+DRIVER_COLUMNS = {
+    "Abbreviation": "Driver",
+    "FullName": "FullName",
+    "TeamName": "Team",
+    "Position": "FinishPosition",
+}
+
 
 def fetch_data(year: int, country: str) -> None:
     """
@@ -67,11 +81,12 @@ def fetch_data(year: int, country: str) -> None:
     If no session data is available, prints a warning and exits cleanly.
     """
     country_lowercase = country.lower()
-    
+
     # Define outputs
     laps_csv = LAPS_DIR / f"{country_lowercase}_{year}.csv"
     pitstops_csv = LAPS_DIR / f"{country_lowercase}_{year}_pitstops.csv"
     weather_csv = HISTORY_DIR / f"{country_lowercase}_{year}_weather.csv"
+    drivers_csv = LAPS_DIR / f"{country_lowercase}_{year}_drivers.csv"
 
     print(f"Loading {year} {country} - Race session ...")
     
@@ -122,6 +137,17 @@ def fetch_data(year: int, country: str) -> None:
     df_weather = weather[available_weather].copy()
     df_weather.to_csv(weather_csv, index=False)
     print(f"[OK] {len(df_weather)} weather rows saved to: {weather_csv.relative_to(ROOT_DIR)}")
+
+    # ── 4. Drivers reference CSV (code -> full name -> team) ────────────────
+    results: pd.DataFrame = session.results
+    available_src = [col for col in DRIVER_COLUMNS if col in results.columns]
+    missing_driver = [col for col in DRIVER_COLUMNS if col not in results.columns]
+    if missing_driver:
+        print(f"  [WARN] Driver columns not found and skipped: {missing_driver}")
+
+    df_drivers = results[available_src].rename(columns=DRIVER_COLUMNS).copy()
+    df_drivers.to_csv(drivers_csv, index=False)
+    print(f"[OK] {len(df_drivers)} driver(s) saved to: {drivers_csv.relative_to(ROOT_DIR)}")
 
 
 if __name__ == "__main__":

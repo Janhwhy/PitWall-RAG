@@ -21,7 +21,7 @@ class TyreAgent(BaseAgent):
         """Initialise TyreAgent with name 'tyre_agent' and access to laps and pitstops."""
         super().__init__(name="tyre_agent", collections=["laps", "pitstops"])
 
-    def run(self, query: str) -> dict[str, Any]:
+    def run(self, query: str, race: str | None = None, year: int | None = None) -> dict[str, Any]:
         """
         Analyse F1 tyre data (compounds, degradation, stint lengths, undercut windows, pit stops)
         to answer queries.
@@ -30,6 +30,10 @@ class TyreAgent(BaseAgent):
         ----------
         query : str
             The user question/query text.
+        race : str | None
+            If given, scope retrieval to this race.
+        year : int | None
+            If given, scope retrieval to this season.
 
         Returns
         -------
@@ -37,7 +41,7 @@ class TyreAgent(BaseAgent):
             Structured result containing agent identifier, answer, and count of chunks used.
         """
         # ── 1. Retrieve Scoped Chunks ────────────────────────────────────────
-        chunks = self._retrieve(query)
+        chunks = self._retrieve(query, race=race, year=year)
 
         # ── 2. Specialist Prompts ───────────────────────────────────────────
         system_prompt = (
@@ -47,7 +51,16 @@ class TyreAgent(BaseAgent):
             "RULES:\n"
             "1. Answer ONLY from the context provided in the user message. Do not draw on outside knowledge, assumptions, or prior races unless explicitly reflected in the supplied context.\n"
             "2. If the context does not contain enough information to answer the question fully and accurately, respond with exactly: \"I don't have enough data to answer that.\"\n"
-            "3. Be concise and precise. Use F1 terminology correctly. Prefer structured answers (short paragraphs or bullet points)."
+            "3. Be concise and precise. Use F1 terminology correctly. Prefer structured answers (short paragraphs or bullet points).\n"
+            "4. Refer to drivers by their 3-letter code exactly as it appears in the context (e.g. VER, LEC, ANT). "
+            "Never expand a code into a full name from your own knowledge — code-to-driver assignments for this "
+            "season may not match what you'd expect, and guessing produces wrong names.\n"
+            "5. Your retrieved context is a small sample of semantically similar chunks, not a complete result set. "
+            "Never state a total count, full tally, or team-wide aggregate (e.g. \"Team X pitted N times\") as if it "
+            "were exhaustive — you cannot see every matching record. Team affiliation for a driver is NEVER present "
+            "in this context at all, so never attribute a stat to a team unless the chunk text itself names that team. "
+            "Describe only what you specifically observed, and say so is better answered from the full database if "
+            "the question asks for a precise count or team-level total."
         )
 
         # Build context section from chunks

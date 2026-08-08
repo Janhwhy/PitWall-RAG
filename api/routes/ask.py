@@ -8,6 +8,7 @@ a full AskResponse with the synthesised answer and per-agent breakdowns.
 from fastapi import APIRouter
 
 from api.models import AgentResult, AskRequest, AskResponse
+from api.race_utils import parse_race_label
 from agents.orchestrator import Orchestrator
 
 router = APIRouter()
@@ -32,7 +33,10 @@ def ask_question(body: AskRequest) -> AskResponse:
     AskResponse
         The synthesised final answer plus a list of per-agent results.
     """
-    final_answer, raw_results = _orchestrator.run_with_details(body.question)
+    race_name, year = parse_race_label(body.race)
+    final_answer, raw_results = _orchestrator.run_with_details(
+        body.question, race=race_name, year=year
+    )
 
     agents_consulted = [
         AgentResult(

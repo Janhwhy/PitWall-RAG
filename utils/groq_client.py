@@ -61,7 +61,13 @@ def _get_client() -> Groq:
             "Add it to your .env file (see .env.example) or export it as an "
             "environment variable before running PitWall."
         )
-    return Groq(api_key=api_key)
+    # The SDK's default max_retries=2 respects Groq's Retry-After header on
+    # 429s, which on the free tier can be 10+ seconds — with up to 2 retries
+    # that's 20-30+ seconds of pure dead wait on a SINGLE call before it even
+    # fails. One retry is enough to smooth over a transient blip without
+    # letting a sustained rate-limit turn into a multi-request pileup; the
+    # orchestrator already tolerates an individual agent failing outright.
+    return Groq(api_key=api_key, max_retries=1)
 
 
 # ── Public API ────────────────────────────────────────────────────────────────

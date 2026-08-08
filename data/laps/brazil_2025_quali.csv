@@ -1,0 +1,21 @@
+Driver,FullName,Team,GridPosition,Q1,Q2,Q3
+NOR,Lando Norris,McLaren,1.0,69.656,69.616,69.511
+ANT,Kimi Antonelli,Mercedes,2.0,70.192,69.774,69.685
+LEC,Charles Leclerc,Ferrari,3.0,69.934,69.801,69.805
+PIA,Oscar Piastri,McLaren,4.0,69.928,69.835,69.886
+HAD,Isack Hadjar,Racing Bulls,5.0,70.083,69.970,69.931
+RUS,George Russell,Mercedes,6.0,69.935,69.880,69.942
+LAW,Liam Lawson,Racing Bulls,7.0,70.108,69.950,69.962
+BEA,Oliver Bearman,Haas F1 Team,8.0,69.891,69.755,69.977
+GAS,Pierre Gasly,Alpine,9.0,69.885,69.857,70.002
+HUL,Nico Hulkenberg,Kick Sauber,10.0,70.337,69.985,70.039
+ALO,Fernando Alonso,Aston Martin,11.0,70.181,70.001,
+ALB,Alexander Albon,Williams,12.0,70.115,70.053,
+HAM,Lewis Hamilton,Ferrari,13.0,70.016,70.100,
+STR,Lance Stroll,Aston Martin,14.0,70.041,70.161,
+SAI,Carlos Sainz,Williams,15.0,70.184,70.472,
+VER,Max Verstappen,Red Bull Racing,16.0,70.403,,
+OCO,Esteban Ocon,Haas F1 Team,17.0,70.438,,
+COL,Franco Colapinto,Alpine,18.0,70.632,,
+TSU,Yuki Tsunoda,Red Bull Racing,19.0,70.711,,
+BOR,Gabriel Bortoleto,Kick Sauber,,,,
